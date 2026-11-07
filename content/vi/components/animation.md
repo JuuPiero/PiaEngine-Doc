@@ -42,6 +42,9 @@ Object gốc của model có **Animator** (Add Component → Miscellaneous → A
 | Play Automatically | `playAutomatically` | `true` | Tự phát khi bật |
 | Speed | `speed` | `1` | Tốc độ phát |
 | Wrap Mode | `wrapMode` | `Default` | Default = theo Loop Time của clip; Loop / Once / ClampForever |
+| Avatar | `avatar` | | Chỉ hiện với model bật [Optimize Game Objects](../assets/models.md#optimize-game-objects) (importer tự đặt): clip điều khiển bộ xương ẩn của model này thay cho các GameObject xương |
+| Baked Animation (GPU) | `useBakedAnimation` | `false` | Nhóm Performance. Clip được bake thành texture, GPU skin mesh — xem [Baked Animation](#baked-animation-gpu) |
+| Bake Frame Rate | `bakeFrameRate` | `30` | Số frame / giây khi bake (GPU nội suy giữa hai frame) |
 
 ```ts
 const anim = this.getComponentInChildren(Animator)!;
@@ -55,6 +58,27 @@ anim.sampleClip('Run', 0.5);    // áp tư thế tại 0.5 giây mà không phá
 ```
 
 Inspector của Animator có **Preview**: chọn clip, Play / Pause, kéo thanh thời gian để xem clip ngay trong Edit Mode. Bấm Stop (hoặc lưu scene, bấm Play, chọn object khác) thì tư thế trả lại như cũ, scene không bị đổi.
+
+## Baked Animation (GPU)
+
+Cho đám đông nhân vật cùng model (hàng trăm hành khách, lính, NPC). Giống `SkeletalAnimation.useBakedAnimation` của Cocos Creator và kỹ thuật "animation texture + GPU instancing" thường dùng trong Unity (Unity không có sẵn ô này).
+
+- Mỗi clip trong **Clips** được lấy mẫu **một lần** (Bake Frame Rate, mặc định 30 fps) thành texture ma trận xương, **dùng chung** cho mọi nhân vật cùng model + cùng danh sách clip.
+- Mỗi frame Animator chỉ tăng thời gian: không tính xương trên CPU, không upload bone texture từng nhân vật. GPU skin mesh từ texture (nội suy giữa hai frame; `crossFade` trộn hai tư thế).
+- SkinnedMeshRenderer có material bật [Enable GPU Instancing](../graphics/materials.md#gpu-instancing): mọi nhân vật cùng mesh + cùng material + cùng danh sách clip vẽ **một draw call** (mỗi submesh). Material không bật instancing (hoặc material import kèm model, Default-Material) vẫn skin bằng GPU nhưng mỗi nhân vật một draw call.
+
+Bật:
+1. Model ▸ Import Settings ▸ **Rig**: Generic + **[Optimize Game Objects](../assets/models.md#optimize-game-objects)** → Apply.
+2. Animator trên object gốc của model (trong prefab của nhân vật) → tick **Baked Animation (GPU)**, hoặc `animator.useBakedAnimation = true`.
+3. Material của nhân vật: **Enable GPU Instancing**. Màu khác nhau → một material dùng chung cho mỗi màu (mỗi màu một draw call).
+
+Script không đổi (`play`, `crossFade`, `speed`, `time`, `normalizedTime`, `stop`, Wrap Mode, Preview). Track không phải xương (object gốc, blend shape) vẫn chạy trên CPU; **Extra Transforms to Expose** vẫn có Transform đúng theo animation. Bóng đổ đúng tư thế; click chọn / khung chọn dùng mesh ở tư thế bind.
+
+Ví dụ BusGo (~380 hành khách, 6 màu): Batches **376 → 75** (hành khách từ ~370 draw call còn 7), build web 90 → 133 FPS (GTX 1650).
+
+::: tip Giới hạn
+Chỉ clip của model (không `.anim.json`); mesh có blend shape tự dùng cách cũ. `crossFade` trộn ma trận xương (gần giống trộn từng xương; xương không có trong clip mới về tư thế bind thay vì giữ tư thế cũ). Một nhóm được cull theo khung bao chung; nhân vật scale âm trong cùng nhóm bị lật mặt. Chưa có MaterialPropertyBlock (màu riêng từng instance).
+:::
 
 
 ## Cửa sổ Animation

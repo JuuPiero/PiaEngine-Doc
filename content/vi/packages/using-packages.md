@@ -24,6 +24,7 @@ Editor tự nạp lại khi `package.json` thay đổi.
 **Window → Package Manager**:
 
 - Nút **+**: **Add package by name / git URL…**, **Add package from disk…**, **Create new package…**.
+- **Add package from disk…**: gõ đường dẫn hoặc bấm **Browse…** để chọn thư mục bằng hộp thoại của hệ điều hành (Windows / macOS / Linux có zenity hoặc kdialog). Thư mục cùng ổ đĩa được ghi thành đường dẫn tương đối so với project (`file:../...`).
 - Bộ lọc: *In Project*, *Pia packages only*, *Embedded (being developed)*.
 - Nút **npm install** (hoặc **Install missing** khi có package chưa cài) chạy `npm install` trong thư mục project.
 - Chọn một package để xem: Version spec, Location, phần Runtime / Editor, Components mà package cung cấp, Dependencies; các nút **Remove**, **Update to latest**, **Show in Explorer**.

@@ -13,7 +13,7 @@ Giống Unity, model được dựng thành **một cây GameObject** theo đún
 
 - Object gốc mang tên model. Mỗi node của file là một GameObject con: tên, position / rotation / scale lấy từ file (đã nhân tỷ lệ import).
 - Node có mesh → [MeshFilter + MeshRenderer](../components/rendering-3d.md) dùng mesh và material của model. Mesh nhiều material giữ đủ **submesh**: material thứ i vẽ submesh thứ i.
-- Mesh có xương (skinned) hoặc blend shape → [SkinnedMeshRenderer](../components/rendering-3d.md#skinnedmeshrenderer); các xương là những GameObject con, di chuyển / animate chúng thì mesh biến dạng theo.
+- Mesh có xương (skinned) hoặc blend shape → [SkinnedMeshRenderer](../components/rendering-3d.md#skinnedmeshrenderer); các xương là những GameObject con, di chuyển / animate chúng thì mesh biến dạng theo (trừ khi bật [Optimize Game Objects](#optimize-game-objects)).
 - Clip trong file → [Animator](../components/animation.md#animator) trên object gốc.
 - Camera / light trong file → component [Camera](../components/camera.md) / [Light](../components/lights.md).
 
@@ -75,6 +75,26 @@ Kích thước = Scale Factor × (Convert Units ? đơn vị của file : 1). FB
 ### Rig
 
 **Animation Type**: **None** (không import animation), **Legacy** (component [Animation](../components/animation.md) trên object gốc), **Generic** (component [Animator](../components/animation.md#animator), mặc định). Humanoid chưa hỗ trợ.
+
+#### Optimize Game Objects
+
+Như Unity (chỉ với Generic). Mặc định mỗi xương là một GameObject (ví dụ nhân vật 19 xương = 20 object). Bật **Optimize Game Objects** thì model prefab chỉ còn:
+
+- object gốc (có Animator),
+- các object có renderer (mesh, camera, light),
+- các xương được tick trong **Extra Transforms to Expose**.
+
+Bộ xương nằm bên trong engine: Animator lấy mẫu clip vào một tư thế dạng mảng số và renderer 3D skin mesh từ đó — không còn GameObject, Transform hay node render cho từng xương, nên đám đông nhân vật nhẹ hơn nhiều.
+
+- Script dùng Animator như cũ (`play`, `crossFade`, `speed`, `time`, `stop`, Wrap Mode, Preview trong Edit Mode). Ô **Avatar** của Animator (tự đặt) cho biết nó điều khiển bộ xương ẩn của model nào; `SkinnedMeshRenderer.bones` để trống.
+- **Extra Transforms to Expose**: danh sách xương (có ô lọc theo tên) với ô tick. Xương được tick vẫn là GameObject, đặt thẳng dưới object gốc (như Unity) và được ghi Transform theo animation mỗi frame — để gắn vũ khí vào tay, đọc vị trí đầu… Object có renderer nằm dưới một xương (mũ gắn vào đầu) cũng được đặt dưới object gốc và đi theo xương đó.
+- Đổi tuỳ chọn thì model import lại và mọi instance cập nhật; override trên các object còn lại giữ nguyên, override trên xương đã bỏ thì bị bỏ qua. Object bạn tự thêm làm con của một xương không expose sẽ mất cha — expose xương đó trước.
+- Animator phải nằm trên object gốc của model.
+- Đám đông nhân vật: bật thêm [Baked Animation (GPU)](../components/animation.md#baked-animation-gpu) trên Animator — clip bake thành texture, GPU skin, gom draw call bằng GPU Instancing.
+
+::: tip Prefab có model đã Unpack
+Nếu cây xương của model trong prefab là object thường (đã Unpack, không còn liên kết với model), tuỳ chọn không có tác dụng. Mở prefab (Prefab Mode), chuột phải object gốc của model trong Hierarchy ▸ **Prefab ▸ Reconnect to Model**: các object khớp với model thành instance của model (giá trị khác thành override, tham chiếu tới chúng vẫn đúng), rồi lưu prefab.
+:::
 
 ### Animation
 

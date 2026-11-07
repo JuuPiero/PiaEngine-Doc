@@ -107,7 +107,8 @@ Ví dụ đo trong Game view (nút **Stats**): 500 cube + 20 sphere dùng chung 
 | `renderer.material` (bản sao riêng) | giữ Enable GPU Instancing nhưng là material khác → nhóm riêng (đổi màu từng object thì vẫn một draw call mỗi object) |
 | Standard / Unlit dựng sẵn, Lit Shader (surface shader), Unlit Shader tự viết (kể cả `VERTEXPROGRAM`) | hỗ trợ |
 | Shader tự đọc `modelMatrix` / `modelViewMatrix` / `normalMatrix` | tự vẽ từng object (Inspector có ghi chú) |
-| SkinnedMeshRenderer (như Unity), `Default-Material`, material import kèm model | không gom |
+| SkinnedMeshRenderer | gom khi Animator bật [Baked Animation (GPU)](../components/animation.md#baked-animation-gpu) (cùng mesh + material + clip); không bật thì không gom (như Unity) |
+| `Default-Material`, material import kèm model | không gom |
 
 ::: note 2D
 Trong pipeline 2D tuỳ chọn này **không có tác dụng**: PixiJS đã tự gom sprite thành batch. Inspector chỉ hiện Enable GPU Instancing cho shader 3D.

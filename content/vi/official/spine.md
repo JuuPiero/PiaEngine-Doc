@@ -119,6 +119,18 @@ export class Hero extends MonoBehaviour {
 - Sự kiện: `onStart`, `onEnd`, `onComplete`, `onEvent`, `addListener({ start, interrupt, end, dispose, complete, event })`. Mỗi hàm trả về một hàm để huỷ đăng ký.
 - Lớp của spine-core (`Skeleton`, `AnimationState`, `TrackEntry`, `Physics`…) có trong `import { spine } from 'com.pia.spine'`.
 
+### Vật lý (physics constraint, Spine 4.2)
+
+Physics constraint của Spine 4.2 (tóc, váy, đuôi, dây...) chạy mỗi frame. Như spine-unity, chuyển động của GameObject được truyền vào vật lý (**Physics Inheritance** trong Inspector của SkeletonAnimation):
+
+| Field | Mặc định | Ý nghĩa |
+|---|---|---|
+| Position (`physicsPositionInheritanceFactor`) | (1, 1) | Object di chuyển thì phần vật lý văng theo quán tính; 0 = bỏ qua (theo trục X / Y) |
+| Rotation (`physicsRotationInheritanceFactor`) | 1 | Object xoay quanh Z thì phần vật lý phản ứng theo |
+| Movement relative to (`physicsMovementRelativeTo`) | None | Đo chuyển động so với Transform này (camera, sàn đang chạy...): cùng di chuyển với nó thì không văng |
+
+Chỉ áp dụng khi đang chơi (kéo object trong Edit Mode không làm văng). Sau khi dịch chuyển tức thời (teleport) gọi `resetLastPositionAndRotation()` (hoặc `resetLastPosition()` / `resetLastRotation()`) để không bị văng mạnh; `resetPhysics()` đưa vật lý về đúng tư thế hiện tại.
+
 ### Khi nào `state` / `skeleton` dùng được
 
 - Scene nạp xong dữ liệu skeleton trước khi chạy, nên `awake` / `start` dùng được ngay — kể cả SkeletonDataAsset mà prefab trong scene tham chiếu.

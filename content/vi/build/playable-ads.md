@@ -74,14 +74,28 @@ Không có SDK (mở file trên máy) → chạy ở chế độ preview, `openS
 
 ## Build
 
-**Build Settings → Playable Ads**: chọn mạng, URL App Store / Google Play, Scenes (để trống = scene trong Build Settings; playable thường chỉ 1 scene), Output Name, Orientation, Compress, Preview.html. Hoặc dòng lệnh:
+**Build Settings → Playable Ads**: chọn mạng, URL App Store / Google Play, Scenes (để trống = scene trong Build Settings; playable thường chỉ 1 scene), Output Name, Orientation, Compress, Encoding, Preview.html. Hoặc dòng lệnh:
 
 ```bash
 npm run build:game -- ../MyGame --target playable
 npm run build:game -- ../MyGame --target playable --set channels=AppLovin,Unity --set scenes=Level1
 ```
 
-Kết quả ở `Build/playable/<Output Name>/`: `<Tên>_AppLovin.html`, `<Tên>_Mintegral.zip`… và `<Tên>_Preview.html` (không SDK, mở bằng **Build And Run**). Mỗi file được so với giới hạn dung lượng của mạng (thường 5 MB) và cảnh báo khi vượt.
+Kết quả ở `Build/playable/<Output Name>/`: `<Tên>_AppLovin.html`, `<Tên>_Mintegral.zip`… và `<Tên>_Preview.html` (không SDK, mở bằng **Build And Run**; dùng encoding của mạng đầu tiên trong danh sách). Mỗi file được so với giới hạn dung lượng của mạng (thường 5 MB) và cảnh báo khi vượt; báo cáo build ghi encoding của từng file.
+
+### Encoding
+
+Dữ liệu nén được ghi vào HTML dưới dạng text. Option **Encoding** chọn cách ghi:
+
+| Encoding | Tăng so với dữ liệu nén | Ký tự | Dùng khi |
+|---|---|---|---|
+| **base64** | +33 % | ASCII | mạng nào cũng nhận |
+| **base85** | +25 % (file nhỏ hơn base64 ~6 %) | ASCII | an toàn như base64 ở mọi mạng |
+| **base122** | +14 % (file nhỏ hơn base64 ~14 %) | UTF-8 | mạng đọc file đúng UTF-8 |
+
+- **Auto** (mặc định): **AppLovin → base122** (hướng dẫn creative của AppLovin cho phép "base64 or base122"), **mọi mạng khác → base64** vì chưa có tài liệu xác nhận họ nhận HTML có ký tự ngoài ASCII. File **.zip** luôn base64 ở Auto: zip nén lại phần text nên encoding dày hơn không làm zip nhỏ đi.
+- **Encoding Per Network** đổi riêng từng mạng, ví dụ `Unity=base122, Moloco=base85` (`Preview=base85` đổi Preview.html). Hãy thử file trong công cụ preview của mạng trước khi dùng base122 cho mạng đó.
+- File base122 bắt đầu bằng BOM UTF-8 và `<meta charset="utf-8">`, nên trình duyệt vẫn đọc đúng khi server gửi sai charset.
 
 Option lưu trong `pia.project.json`:
 
@@ -104,11 +118,12 @@ Option lưu trong `pia.project.json`:
 ## Bên trong file HTML
 
 1. Game build thành **một** script (`game.js`, mọi dynamic import được gộp), vẫn áp dụng build stripping.
-2. `game.js` + asset được **nén bằng JSZip** rồi **base64**, chia thành nhiều thẻ `<script>`. Tắt **Compress** → asset base64 trực tiếp, không kèm JSZip.
-3. Loader giải nén rồi phục vụ file cho engine mà không cần mạng.
-4. Adapter của mạng quyết định khi nào game được chạy (MRAID ready, quảng cáo hiển thị, `gameStart` của Mintegral…).
+2. `game.js` + asset được gói thành **một khối**: file nén được → một luồng DEFLATE chung (mức 9); file đã nén sẵn (PNG / WebP / OGG / MP3…) giữ nguyên; file trùng nội dung chỉ lưu một lần. Chuỗi base64 lớn trong `game.js` (WASM của Rapier, asset nhúng data URL) được tách thành nhị phân trước khi nén — nhị phân nén tốt hơn base64 ~25 %.
+3. Khối được ghi thành text theo **Encoding**, chia thành nhiều thẻ `<script>`. Tắt **Compress** → không nén.
+4. Loader (~10 KB) giải mã, giải nén bằng `DecompressionStream` của trình duyệt (dự phòng: fflate), rồi phục vụ file cho engine mà không cần mạng.
+5. Adapter của mạng quyết định khi nào game được chạy (MRAID ready, quảng cáo hiển thị, `gameStart` của Mintegral…).
 
-Ví dụ: Demo2D (PixiJS + Rapier 2D) 4.01 MB → HTML ~2.1 MB.
+Ví dụ: Demo2D (PixiJS + Rapier 2D, 4.25 MB) → HTML **1.66 MB** base64 / **1.56 MB** base85 / **1.43 MB** base122 (bản cũ dùng JSZip: 2.18 MB). Giải nén ~30–60 ms trên máy bàn.
 
 ::: tip Giảm dung lượng
 - Chỉ để scene cần thiết.

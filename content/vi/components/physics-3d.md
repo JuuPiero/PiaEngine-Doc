@@ -1,11 +1,11 @@
 ---
 title: Vật lý 3D
-description: Rigidbody, Box/Sphere/Capsule Collider, callback va chạm và Physics.raycast (Rapier 3D).
+description: Rigidbody, Box/Sphere/Capsule Collider, callback va chạm và Physics.raycast / overlap (Rapier hoặc builtin).
 ---
 
 # Vật lý 3D
 
-Vật lý dùng **Rapier** (WASM), chỉ được nạp khi scene có `Rigidbody` / collider — game không dùng vật lý không phải tải Rapier. Bước vật lý chạy theo `fixedUpdate` (`Time.fixedDeltaTime`).
+Engine vật lý chọn theo project ([Chọn engine vật lý](physics-engine.md)): **Rapier** (WASM, mặc định, mô phỏng đầy đủ) hoặc **builtin** (~12 KB, chỉ phát hiện va chạm). Engine chỉ được nạp khi scene có `Rigidbody` / collider — game không dùng vật lý không tải gì. Bước vật lý chạy theo `fixedUpdate` (`Time.fixedDeltaTime`).
 
 ## Rigidbody
 
@@ -79,6 +79,8 @@ if (hit) hit.point, hit.normal, hit.distance, hit.collider, hit.rigidbody, hit.g
 
 Physics.raycastAll(origin, direction, maxDistance);   // mọi điểm chạm
 Physics.overlapSphere(center, radius, layerMask);    // Collider[]
+Physics.overlapBox(center, halfExtents, orientation, layerMask);   // Collider[]
+Physics.checkSphere(center, radius);                 // boolean (checkBox tương tự)
 Physics.gravity = new Vector3(0, -20, 0);
 Physics.queriesHitTriggers = false;
 ```

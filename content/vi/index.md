@@ -20,7 +20,7 @@ Nếu bạn đã quen Unity, phần lớn kiến thức dùng lại được nga
 | Asset | `.meta` + GUID như Unity, đổi tên / di chuyển không mất tham chiếu. ScriptableObject, Resources. |
 | Prefab | Lồng nhau, override (in đậm), Apply / Revert / Unpack, Prefab Mode. |
 | Đồ hoạ | Material + Shader viết theo cú pháp kiểu ShaderLab với GLSL, surface shader có chiếu sáng, nhiều shader dựng sẵn. Particle System. |
-| Gameplay | Vật lý 2D/3D (Rapier) với joint, effector, CharacterController; Audio; UI (Canvas / Text / Image / Button); Animation clip + cửa sổ Animation. |
+| Gameplay | Vật lý 2D/3D chọn engine theo project (Rapier với joint, effector, CharacterController — hoặc builtin ~12 KB chỉ phát hiện va chạm); Audio; UI (Canvas / Text / Image / Button); Animation clip + cửa sổ Animation. |
 | Package | `package.json` của project là manifest, cài bằng `npm install`. Package có phần Runtime và Editor, mở rộng editor bằng API (menu, inspector, gizmo Scene view, property drawer, custom renderer). |
 | Package chính thức | Spine, Splines, Cinemachine, UI Toolkit (HTML / CSS), Playable Ads. |
 | Build | Web tĩnh, chỉ đóng gói thứ thực sự dùng. Package `com.pia.playable` xuất playable ads cho AppLovin, Unity, ironSource, Mintegral, Facebook, Google, TikTok… |

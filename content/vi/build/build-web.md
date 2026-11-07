@@ -45,12 +45,12 @@ Bắt đầu từ các scene trong Build Settings, engine lần theo mọi tham 
 | Script | Có component được dùng trong scene / prefab, hoặc được script khác dùng (`addComponent(Foo)`, `getComponent('Foo')`, import) |
 | Package | Có component được dùng hoặc được script import |
 | Render pipeline | three.js / PixiJS theo pipeline của các scene |
-| Vật lý | Rapier 3D / 2D chỉ khi có `Rigidbody` / collider tương ứng (trong scene, prefab hoặc code) |
+| Vật lý | engine đã chọn ([builtin / Rapier](../components/physics-engine.md)) cho 3D / 2D, chỉ khi có `Rigidbody` / collider tương ứng (trong scene, prefab hoặc code). Báo cáo ghi `Physics 3D: builtin ✓ (11.4 KB)` |
 | Model loader | glTF / FBX / OBJ theo định dạng model được dùng (instance của model, mesh / material / clip `"guid#…"` của model đều tính) |
 
 Script trong `Editor/` và phần Editor của package **không bao giờ** vào build.
 
-Ví dụ: Demo2D không kèm three.js và Rapier 3D; một game 3D không dùng vật lý không kèm Rapier (~4 MB).
+Ví dụ: Demo2D không kèm three.js và Rapier 3D; một game 3D không dùng vật lý không kèm Rapier (~4 MB); game chỉ cần click / trigger chọn engine builtin (~12 KB) thay cho Rapier.
 
 Ảnh có thể được thu nhỏ / nén lại riêng cho bản build (Max Size, Format PNG / JPG / WebP, Quality) trong Import Settings — xem [Nén khi build](../assets/textures-sprites.md#nen-khi-build-web-playable-ads).
 

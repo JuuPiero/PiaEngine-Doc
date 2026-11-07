@@ -48,6 +48,7 @@
         "components/rendering-3d",
         "components/camera",
         "components/lights",
+        "components/physics-engine",
         "components/physics-3d",
         "components/physics-2d",
         "components/physics-joints",

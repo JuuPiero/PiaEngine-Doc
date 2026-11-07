@@ -5,7 +5,7 @@ description: Joint 2D/3D, Effector 2D, ConstantForce và CharacterController —
 
 # Joint, Effector & CharacterController
 
-Các component vật lý mặc định của Unity, cùng tên field / callback. **Add Component → Physics / Physics 2D**. Xem thêm [Vật lý 3D](physics-3d.md) và [Vật lý 2D](physics-2d.md).
+Các component vật lý mặc định của Unity, cùng tên field / callback. **Add Component → Physics / Physics 2D**. Cần engine **Rapier** ([Chọn engine vật lý](physics-engine.md)) — engine builtin không mô phỏng joint / effector / CharacterController. Xem thêm [Vật lý 3D](physics-3d.md) và [Vật lý 2D](physics-2d.md).
 
 | 2D | 3D |
 |---|---|

@@ -1,11 +1,11 @@
 ---
 title: Vật lý 2D
-description: Rigidbody2D, Box/Circle/Capsule Collider 2D, callback 2D và Physics2D (Rapier 2D).
+description: Rigidbody2D, Box/Circle/Capsule Collider 2D, callback 2D và Physics2D (Rapier 2D hoặc builtin).
 ---
 
 # Vật lý 2D
 
-Vật lý 2D chạy trên mặt phẳng **XY** bằng **Rapier 2D**, chỉ được nạp khi scene có component vật lý 2D. Dùng được trong cả scene 2D lẫn 3D.
+Vật lý 2D chạy trên mặt phẳng **XY** bằng engine chọn theo project ([Chọn engine vật lý](physics-engine.md)): **Rapier 2D** (mặc định) hoặc **builtin** (~12 KB, chỉ phát hiện va chạm); chỉ được nạp khi scene có component vật lý 2D. Dùng được trong cả scene 2D lẫn 3D.
 
 ## Rigidbody2D
 
@@ -71,6 +71,9 @@ onTriggerEnter2D(other: Collider2D) {
 Physics2D.raycast(origin, direction, distance, layerMask);   // RaycastHit2D | null
 Physics2D.overlapCircle(point, radius, layerMask);           // Collider2D[]
 Physics2D.overlapPoint(point, layerMask);                    // Collider2D | null
+Physics2D.overlapPointAll(point, layerMask);                 // Collider2D[]
+Physics2D.overlapBox(point, size, angle, layerMask);         // Collider2D[]
+Physics2D.raycastAll(origin, direction, distance);           // RaycastHit2D[] (gần nhất trước)
 Physics2D.gravity = new Vector2(0, -20);
 ```
 

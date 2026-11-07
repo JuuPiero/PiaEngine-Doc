@@ -30,6 +30,7 @@ File cài đặt của project, ở thư mục gốc project. Phần lớn chỉ
 | `layers` | Project Settings → Layers | Tên layer theo index 0..31 |
 | `physics.gravity` | Project Settings → Gravity 3D (y) | `[x, y, z]`, mặc định `[0, -9.81, 0]` |
 | `physics.gravity2D` | Project Settings → Gravity 2D (y) | `[x, y]`, mặc định `[0, -9.81]` |
+| `physics.backend3d` / `physics.backend2d` | Project Settings → 3D / 2D Physics Engine | `builtin` (chỉ phát hiện va chạm, ~12 KB) hoặc `rapier` (mặc định). Xem [Chọn engine vật lý](../components/physics-engine.md) |
 | `time.fixedTimestep` | Project Settings → Fixed Timestep | Bước `fixedUpdate` (mặc định 0.02) |
 | `build.target` | Build Settings → Platform | Platform đang chọn (`web` hoặc id của package) |
 | `build.targets[id]` | Build Settings (form của platform) | Option của từng platform package |

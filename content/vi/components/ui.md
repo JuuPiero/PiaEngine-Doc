@@ -7,7 +7,7 @@ description: Canvas, RectTransform, Image, Text, Button và EventSystem — UI k
 
 UI theo mô hình **uGUI** của Unity: một `Canvas` chứa các phần tử con có `RectTransform`. UI được vẽ bằng **DOM overlay** phía trên game, anchor / pivot tính theo công thức của Unity, đơn vị là pixel canvas, trục Y hướng lên.
 
-Tạo nhanh: **GameObject → UI → Canvas / Panel / Image / Text / Button**.
+Tạo nhanh: **GameObject → UI → Canvas / Panel / Image / Text / Button / Event System**. Canvas tạo từ menu có sẵn `GraphicRaycaster`, và scene được thêm một `EventSystem` nếu chưa có (như Unity).
 
 ## Canvas
 
@@ -96,7 +96,9 @@ if (Input.getMouseButtonDown(0) && !EventSystem.isPointerOverGameObject()) {
 }
 ```
 
-`isPointerOverGameObject()` trả về `true` khi con trỏ đang ở trên phần tử UI có **Raycast Target**.
+`isPointerOverGameObject()` trả về `true` khi con trỏ đang ở trên phần tử UI có **Raycast Target** (khi có EventSystem: cả object mà `PhysicsRaycaster` / `Physics2DRaycaster` tìm thấy).
+
+Phần tử UI (và object cha của nó) nhận được `onPointerClick`, `onPointerEnter`, `onDrag`, `onDrop`… như `IPointerClickHandler` của Unity khi scene có EventSystem và Canvas có `GraphicRaycaster`. Xem [Sự kiện con trỏ (EventSystem)](../scripting/pointer-events.md).
 
 ::: note
 - Chưa có: Canvas World Space / Screen Space - Camera, layout group, ScrollRect, InputField, Toggle, Slider, Dropdown, Mask.

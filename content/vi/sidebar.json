@@ -33,6 +33,7 @@
         "scripting/instantiate-destroy",
         "scripting/coroutines-time",
         "scripting/input",
+        "scripting/pointer-events",
         "scripting/events",
         "scripting/scene-manager",
         "scripting/scriptable-object",

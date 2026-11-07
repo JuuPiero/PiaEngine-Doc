@@ -36,6 +36,8 @@ PiaEngine cố ý giữ **tên và hành vi của Unity**. Khác biệt chính: 
 | Joint, Effector 2D, `CharacterController`, `ConstantForce` | Cùng tên: `HingeJoint`, `HingeJoint2D`, `WheelJoint2D`, `PlatformEffector2D`, `CharacterController.move`… — xem [Joint, Effector & CharacterController](../components/physics-joints.md) |
 | `AudioSource`, `AudioListener`, `PlayOneShot`, `PlayClipAtPoint` | Cùng tên: `playOneShot`, `AudioSource.playClipAtPoint`; Spatial Blend = 1 là âm thanh 3D |
 | `Canvas`, `RectTransform`, `Image`, `Text`, `Button.onClick` | Cùng tên (UI vẽ bằng DOM overlay, anchor/pivot theo công thức Unity) |
+| `EventSystem`, `GraphicRaycaster`, `PhysicsRaycaster`, `Physics2DRaycaster`, `IPointerClickHandler`, `IDragHandler`… | Cùng tên; handler là method `onPointerClick(eventData)`, `onDrag`… — xem [Sự kiện con trỏ](../scripting/pointer-events.md) |
+| `OnMouseDown`, `OnMouseUpAsButton`, `OnMouseEnter`… | `onMouseDown()`, `onMouseUpAsButton()`, `onMouseEnter()`… (object có collider, không cần EventSystem) |
 | `LineRenderer` (`SetPosition`, `positionCount`, Edit Points), `TrailRenderer` (`time`, `emitting`, `Clear`) | Cùng tên, API camelCase; chạy 2D và 3D; kéo điểm trong Scene view — xem [Line Renderer & Trail Renderer](../components/line-trail-renderer.md) |
 | `Animation` + `.anim`, cửa sổ Animation | `Animation` + `.anim.json`, Window → Animation (<kbd>Ctrl</kbd>+<kbd>6</kbd>), nút Record, animation event |
 | Model import (FBX/glTF/OBJ), model prefab, `SkinnedMeshRenderer`, `Animator` (`Play`, `CrossFade`), ModelImporter (Model / Rig / Animation / Materials, Convert Units, Extract Materials) | kéo model vào Scene → cây GameObject liên kết với model, cùng tên component / field; Animator chưa có state machine. Xem [Model 3D](../assets/models.md) |

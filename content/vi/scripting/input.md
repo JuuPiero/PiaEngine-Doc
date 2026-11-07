@@ -75,4 +75,5 @@ if (Input.getButtonDown('Jump') && (grounded || this._airJumpsLeft > 0)) {
 - Trong editor, Game view chỉ nhận input khi được focus.
 - Bảng axis hiện cố định (chưa có trang cấu hình Input Manager). Chưa có Input System mới, gamepad.
 - Khi click vào UI (Image / Button / Text có Raycast Target), dùng `EventSystem.isPointerOverGameObject()` để bỏ qua input của game. Xem [UI](../components/ui.md).
+- Click / kéo thả trực tiếp lên object (`onPointerClick`, `onDrag`…, `onMouseDown`…): xem [Sự kiện con trỏ (EventSystem)](pointer-events.md).
 :::

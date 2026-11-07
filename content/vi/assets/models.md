@@ -1,6 +1,6 @@
 ---
 title: Model 3D
-description: Import glTF / GLB / FBX / OBJ thành cây GameObject (như model prefab của Unity), Import Settings Model / Rig / Animation / Materials, Convert Units, Animator, SkinnedMeshRenderer.
+description: Import glTF / GLB / FBX / OBJ thành cây GameObject (như model prefab của Unity), Import Settings Model / Rig / Animation / Materials, Convert Units, Mesh / Anim. Compression, Animator, SkinnedMeshRenderer.
 ---
 
 # Model 3D
@@ -64,6 +64,7 @@ Chọn model trong Project. Inspector chia tab như ModelImporter của Unity; b
 | Preserve Hierarchy | tắt | Tắt: một node gốc rỗng duy nhất được gộp vào object gốc. Bật: giữ thành object con |
 | Sort Hierarchy By Name | bật | Object con xếp theo tên (tắt = theo thứ tự trong file) |
 | Normals | Import | Import = normal của file; Calculate = tính lại, cạnh gắt hơn **Smoothing Angle** thì giữ cứng |
+| Mesh Compression | Off | Low / Medium / High: nén dữ liệu đỉnh trong bản build — xem [Nén model khi build](#nen-model-khi-build) |
 
 Dòng cuối ghi kích thước model (mét), số object, mesh, tam giác, material, clip.
 
@@ -78,6 +79,7 @@ Kích thước = Scale Factor × (Convert Units ? đơn vị của file : 1). FB
 ### Animation
 
 - **Import Animation**.
+- **Anim. Compression**: Off hoặc **Keyframe Reduction** với Rotation Error (độ), Position Error / Scale Error (% giá trị), mặc định 0.5 như Unity. Bỏ những key mà nội suy hai key bên cạnh tái tạo được trong sai số; áp dụng trong editor lẫn bản build.
 - Danh sách **clip**: tên, take nguồn, frame bắt đầu / kết thúc (30 fps — cắt một take thành nhiều clip), **Loop Time**. Nút **+ Clip** thêm clip, **Reset** về một clip cho mỗi take.
 - Chọn một clip để xem nó chạy trong preview.
 
@@ -95,7 +97,24 @@ Material import kèm model là **chỉ đọc**: renderer vẽ đúng như file 
 
 ## Build
 
-Scene dùng model (instance, mesh, material hay clip của model) sẽ mang theo file model + file phụ (buffer + texture của glTF, `.mtl` + texture của OBJ, texture của FBX) và loader đúng định dạng. Build report ghi `Loaders: gltf, fbx…`.
+Scene dùng model (instance, mesh, material hay clip của model) sẽ mang theo file model + file phụ (buffer + texture của glTF, `.mtl` + texture của OBJ, texture của FBX) và loader đúng định dạng. Build report ghi `Loaders: gltf, fbx…`. Material trong Remapped Materials / External Materials cũng được mang theo.
+
+### Nén model khi build
+
+Giống Mesh Compression / Anim. Compression của Unity, để bản build (web và playable) nhẹ hơn:
+
+| Mức | Vị trí, UV | Normal, tangent | Skin weight |
+|---|---|---|---|
+| Low | 16 bit | 12 bit | 16 bit |
+| Medium | 14 bit | 10 bit | 16 bit |
+| High | 12 bit | 8 bit | 16 bit |
+
+- Dữ liệu đỉnh được lượng tử hoá theo mức trên rồi nén bằng **meshoptimizer**; clip được Keyframe Reduction (nếu bật); texture nhúng vào cùng file.
+- Model được mang theo dạng `<model>.pmodel` thay cho file gốc. Đó là chính các object mà loader FBX / glTF / OBJ tạo ra (cùng cây, tên node, material, xương, blend shape, clip, tỷ lệ Scale Factor / Convert Units), nên override trong scene và sub-asset `"guid#mesh:…"` vẫn đúng như trong editor.
+- Loader FBX / glTF không còn trong build khi mọi model định dạng đó đều được nén; game chỉ thêm bộ giải nén meshopt (vài chục KB).
+- Mesh Compression chỉ áp dụng cho bản build: trong editor vẫn là mesh gốc.
+- Model quá nhỏ mà nén lại lớn hơn file gốc thì giữ nguyên (build report ghi cảnh báo).
+- Build report có dòng `Models: N compressed (trước → sau): …`. Ví dụ: Samba.fbx (Mixamo, 166k đỉnh, 18 s animation) 3.51 MB → 0.89 MB với Low + Keyframe Reduction; Bus.fbx 82 KB → 28 KB với Medium.
 
 ## Chuyển từ ModelRenderer
 

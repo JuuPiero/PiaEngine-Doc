@@ -1,6 +1,6 @@
 ---
 title: Material
-description: Material là shader kèm giá trị thuộc tính; danh sách Materials trên renderer và API trong code.
+description: Material là shader kèm giá trị thuộc tính; danh sách Materials trên renderer, GPU Instancing và API trong code.
 ---
 
 # Material
@@ -76,6 +76,7 @@ mesh.material!.setTextureScale('_MainTex', [4, 4]);                  // lặp 4 
 | Màu / vector | `getColor`, `setColor(name, Color \| [r,g,b,a])`, `getVector`, `setVector`, `color` (= `_Color`) |
 | Texture | `getTexture`, `setTexture(name, guid)`, `getTextureScale/Offset`, `setTextureScale/Offset`, `getTextureScaleOffset`, `setTextureScaleOffset`, `mainTextureScale`, `mainTextureOffset` |
 | Chung | `hasProperty(name)`, `getValue`, `setValue` |
+| GPU Instancing | `enableInstancing` (xem [GPU Instancing](#gpu-instancing)) |
 
 | Thuộc tính renderer | Ý nghĩa |
 |---|---|
@@ -83,6 +84,38 @@ mesh.material!.setTextureScale('_MainTex', [4, 4]);                  // lặp 4 
 | `sharedMaterials` | Cả list asset |
 | `material` | Bản sao riêng của phần tử đầu (lần truy cập đầu tạo bản sao) |
 | `materials` | Bản sao riêng của cả list |
+
+## GPU Instancing
+
+Như Unity: chọn material → **Advanced Options → Enable GPU Instancing**. Các **MeshRenderer** dùng material đó với **cùng mesh** (cùng submesh), cùng Cast / Receive Shadows và cùng Layer được vẽ chung **một draw call** — ma trận của từng object lấy từ Transform mỗi frame.
+
+```ts
+const mat = await Resources.load('Materials/Crate', Material);
+mat.enableInstancing = true;   // như material.enableInstancing của Unity
+```
+
+Trong file `.mat.json` là `"enableInstancing": true` cạnh `"shader"` (file cũ không có dòng này thì là tắt).
+
+Ví dụ đo trong Game view (nút **Stats**): 500 cube + 20 sphere dùng chung material, có bóng đổ — **Batches 1143 → 33**, trong đó 10 draw call instanced (mỗi nhóm một lần vẽ + một lần đổ bóng).
+
+| Trường hợp | Kết quả |
+|---|---|
+| Di chuyển, `setActive(false)`, `renderer.enabled = false`, xoá, `instantiate`, đổi `sharedMaterial` lúc chạy | cập nhật ngay frame sau |
+| Chọn / click chọn trong Scene view, khung chọn, Frame Selected | như object thường |
+| Mesh nhiều submesh | mỗi submesh gom riêng theo material của nó |
+| Material thêm (multi-pass) vẽ lại submesh cuối | chỉ gom khi **mọi** material vẽ submesh đó đều bật instancing |
+| `renderer.material` (bản sao riêng) | giữ Enable GPU Instancing nhưng là material khác → nhóm riêng (đổi màu từng object thì vẫn một draw call mỗi object) |
+| Standard / Unlit dựng sẵn, Lit Shader (surface shader), Unlit Shader tự viết (kể cả `VERTEXPROGRAM`) | hỗ trợ |
+| Shader tự đọc `modelMatrix` / `modelViewMatrix` / `normalMatrix` | tự vẽ từng object (Inspector có ghi chú) |
+| SkinnedMeshRenderer (như Unity), `Default-Material`, material import kèm model | không gom |
+
+::: note 2D
+Trong pipeline 2D tuỳ chọn này **không có tác dụng**: PixiJS đã tự gom sprite thành batch. Inspector chỉ hiện Enable GPU Instancing cho shader 3D.
+:::
+
+::: tip Giới hạn
+Một nhóm được cull theo khung bao của cả nhóm (không cull từng object). Object trong suốt trong cùng một nhóm không được sắp xếp xa → gần với nhau — với material trong suốt chồng lên nhau, cân nhắc tắt instancing.
+:::
 
 ## Ví dụ
 

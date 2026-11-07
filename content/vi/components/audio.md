@@ -13,7 +13,7 @@ Audio chạy trên Web Audio API.
 
 | Thuộc tính | Field | Mặc định | Mô tả |
 |---|---|---|---|
-| AudioClip | `clip` | | Asset audio (`.mp3`, `.ogg`, `.wav`, `.m4a`, `.aac`, `.flac`) |
+| AudioClip | `clip` | | `AudioClip` — file audio (`.mp3`, `.ogg`, `.wav`, `.m4a`, `.aac`, `.flac`) |
 | Mute | `mute` | `false` | |
 | Play On Awake | `playOnAwake` | `true` | Tự phát khi component bật |
 | Loop | `loop` | `false` | |
@@ -33,7 +33,40 @@ src.playOneShot(this.jumpSound, 0.7);   // phát chồng một clip, không ng�
 AudioSource.playClipAtPoint(this.pickupSound, this.transform.position, 0.8);
 ```
 
-Clip được truyền dưới dạng **chuỗi tham chiếu asset** — chính là giá trị của field `@field({ assetType: 'audio' })`.
+`playOneShot` / `playClipAtPoint` nhận `AudioClip` hoặc chuỗi GUID / đường dẫn (giá trị của field `@field({ assetType: 'audio' })` kiểu cũ vẫn dùng được).
+
+## AudioClip
+
+Giống `UnityEngine.AudioClip`: một file audio dùng làm field. Lưu bằng GUID; clip được scene / prefab tham chiếu sẽ được **nạp và giải mã trước khi scene chạy** (như "Preload Audio Data" của Unity), kể cả trước khi người dùng chạm vào màn hình — nên `length` dùng được ngay trong `start()`.
+
+```ts Assets/Scripts/AudioManager.ts
+import { AudioClip, AudioSource, MonoBehaviour, field } from '@pia/core';
+
+export class AudioManager extends MonoBehaviour {
+  @field([AudioClip]) clips: AudioClip[] = [];    // kéo nhiều file audio vào danh sách
+  @field(AudioClip) music: AudioClip | null = null;
+  private byName = new Map<string, AudioClip>();
+
+  awake() {
+    for (const c of this.clips) this.byName.set(c.name, c);   // name = tên file không đuôi
+  }
+
+  play(name: string, volume = 1) {
+    this.getComponent(AudioSource)?.playOneShot(this.byName.get(name) ?? null, volume);
+  }
+}
+```
+
+| Thành viên | Ý nghĩa |
+|---|---|
+| `name`, `path`, `guid` | Tên file (không đuôi), đường dẫn, GUID |
+| `length` | Thời lượng (giây); 0 khi chưa nạp |
+| `samples`, `channels`, `frequency` | Số mẫu mỗi kênh, số kênh, tần số lấy mẫu |
+| `isLoaded`, `await load()` | Đã nạp chưa / nạp (clip lấy lúc chạy bằng code) |
+| `AudioClip.get(ref)`, `await AudioClip.load(ref)` | Lấy clip theo GUID hoặc đường dẫn (`'Assets/Audio/hit.wav'`) |
+| `await Resources.load('Sounds/hit', AudioClip)` | Clip trong thư mục `Resources/` |
+
+Mọi field trỏ tới cùng một file dùng chung một instance. Build chỉ đóng gói file audio được tham chiếu.
 
 ## AudioListener
 
@@ -46,7 +79,7 @@ AudioListener.pause = true;   // tạm dừng mọi âm thanh (ví dụ menu pau
 
 ## Autoplay của trình duyệt
 
-Trình duyệt chỉ cho phát âm thanh **sau khi người dùng tương tác** (click, chạm, phím). Lệnh `play()` gọi trước đó được hoãn lại và tự phát ở tương tác đầu tiên. Đây là giới hạn của web, không phải lỗi của game.
+Trình duyệt chỉ cho phát âm thanh **sau khi người dùng tương tác** (click, chạm, phím). Lệnh `play()` gọi trước đó được hoãn lại và tự phát ở tương tác đầu tiên; clip vẫn được nạp và giải mã sẵn từ trước. Đây là giới hạn của web, không phải lỗi của game.
 
 ::: tip Trong editor
 Game view có nút **Mute Audio** để tắt tiếng khi test.
@@ -55,8 +88,7 @@ Game view có nút **Mute Audio** để tắt tiếng khi test.
 ## Ví dụ
 
 ```ts Assets/Scripts/PhysicsPlayer.ts
-@field({ type: 'asset', assetType: 'audio' })
-jumpSound = '';
+@field(AudioClip) jumpSound: AudioClip | null = null;
 
 update() {
   // ...

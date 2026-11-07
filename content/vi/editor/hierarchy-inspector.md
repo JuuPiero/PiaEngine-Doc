@@ -14,7 +14,7 @@ Menu **GameObject** (hoặc chuột phải trong Hierarchy):
 | Create Empty (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd>) / Create Empty Child (<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd>) | Object rỗng (chỉ có Transform). |
 | 3D Object | Cube, Sphere, Capsule, Cylinder, Plane, Quad (MeshFilter + MeshRenderer + collider tương ứng), Text. |
 | 2D Object → Sprites | Sprite dựng sẵn: Square, Circle, Triangle, Capsule, Hexagon, RoundedSquare, Particle. |
-| UI | Canvas, Panel, Image, Text, Button. |
+| UI | Canvas, Panel, Image, Text, Button, Event System. |
 | Light | Directional Light, Point Light, Spotlight. |
 | Effects | Particle System. |
 | Audio | Audio Source. |
@@ -42,6 +42,7 @@ Unity dùng <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> cho Create Empty, như
 - **Add Component**: tìm theo tên hoặc duyệt nhóm (Rendering, Mesh, Physics, Physics 2D, Audio, UI, Effects, Miscellaneous; script của project nằm trong nhóm **Scripts**, component của package trong **Packages/&lt;tên package&gt;**). **New script…** tạo script và gắn luôn.
 - Menu ⋮ của component: **Reset**, **Remove Component**, **Move Up** / **Move Down**, **Edit Script** (với script).
 - Double-click ô **Script** để mở file trong code editor.
+- Ô màu: bấm thanh màu để mở bảng chọn màu; ô mã hex ngay bên cạnh để gõ hoặc dán mã (`E82D29`, `#37A8FD`, `FAE11F80` có alpha) — dán là áp dụng ngay, gõ xong bấm Enter, Esc để huỷ.
 - Object có material: cuối Inspector có bảng chỉnh từng material (sửa ở đó là sửa asset). Xem [Material](../graphics/materials.md).
 
 ### Gán tham chiếu bằng kéo-thả

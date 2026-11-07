@@ -34,6 +34,7 @@ Trong editor: **Help → Keyboard Shortcuts**.
 | Undo / Redo | <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> (hoặc <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>) |
 | Cut / Copy / Paste | <kbd>Ctrl</kbd>+<kbd>X</kbd> / <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>Ctrl</kbd>+<kbd>V</kbd> |
 | Duplicate / Delete / Rename | <kbd>Ctrl</kbd>+<kbd>D</kbd> / <kbd>Del</kbd> / <kbd>F2</kbd> |
+| Duplicate asset (cửa sổ Project, hoặc chuột phải → Duplicate) | <kbd>Ctrl</kbd>+<kbd>D</kbd>: tạo `Tên 1.ext` cạnh file gốc, GUID mới, giữ import settings; thư mục được sao chép cả cây |
 | Select All / Deselect All | <kbd>Ctrl</kbd>+<kbd>A</kbd> / <kbd>Shift</kbd>+<kbd>D</kbd> |
 | Tạo Empty / Empty con | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> / <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> bị Chrome giữ) |
 

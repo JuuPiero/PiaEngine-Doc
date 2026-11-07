@@ -93,6 +93,7 @@ export class Example extends MonoBehaviour {
 | `@field(Button) button: Button \| null = null` (class component) | Kéo object có component đó (hoặc prefab) vào | id object + kiểu |
 | `@field(EnemyData)` (class ScriptableObject) | Ô chọn asset `.asset.json` cùng kiểu | GUID |
 | `@field(TextAsset)`, `@field(JsonAsset)`, `@field(BufferAsset)`, `@field([JsonAsset]) levels: JsonAsset[] = []` | Ô chọn file văn bản / `.json` / file bất kỳ — xem [TextAsset](text-assets.md) | GUID |
+| `@field(AudioClip) hit: AudioClip \| null = null`, `@field([AudioClip]) clips: AudioClip[] = []` | Ô chọn file audio — xem [Audio](../components/audio.md#audioclip) | GUID |
 | `@field(PiaEvent)` hoặc `onHit = new PiaEvent()` | Danh sách hàm gọi (như UnityEvent) | Danh sách call |
 | `@field([X])` hoặc `@field({ ..., array: true })` — X là `'number'`, `'string'`, `Vector3`, `EnemyData`, `GameObject`, class `@serializable`… | Danh sách: Size, + / −, menu ⋮ (Move Up/Down, Duplicate, Delete) | Mảng |
 | `@field(Wave)` hoặc `wave = new Wave()` với `@serializable class Wave` | Nhóm field lồng nhau (foldout) | Object |

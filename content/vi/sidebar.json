@@ -1,0 +1,117 @@
+{
+  "sections": [
+    {
+      "title": "Bắt đầu",
+      "items": [
+        "",
+        "getting-started/install",
+        "getting-started/project-hub",
+        "getting-started/project-structure",
+        "getting-started/first-script",
+        "getting-started/first-build",
+        "getting-started/from-unity"
+      ]
+    },
+    {
+      "title": "Editor",
+      "items": [
+        "editor/overview",
+        "editor/scene-view",
+        "editor/hierarchy-inspector",
+        "editor/play-mode",
+        "editor/scenes",
+        "editor/shortcuts"
+      ]
+    },
+    {
+      "title": "Scripting",
+      "items": [
+        "scripting/monobehaviour",
+        "scripting/fields",
+        "scripting/inspector-attributes",
+        "scripting/gameobject-transform",
+        "scripting/instantiate-destroy",
+        "scripting/coroutines-time",
+        "scripting/input",
+        "scripting/events",
+        "scripting/scene-manager",
+        "scripting/scriptable-object",
+        "scripting/text-assets",
+        "scripting/math-debug"
+      ]
+    },
+    {
+      "title": "Component",
+      "items": [
+        "components/rendering-2d",
+        "components/rendering-3d",
+        "components/camera",
+        "components/lights",
+        "components/physics-3d",
+        "components/physics-2d",
+        "components/physics-joints",
+        "components/audio",
+        "components/ui",
+        "components/animation",
+        "components/particle-system",
+        "components/line-trail-renderer"
+      ]
+    },
+    {
+      "title": "Asset & Prefab",
+      "items": [
+        "assets/overview",
+        "assets/textures-sprites",
+        "assets/sprite-editor",
+        "assets/models",
+        "assets/audio-fonts",
+        "assets/resources",
+        "assets/prefabs"
+      ]
+    },
+    {
+      "title": "Material & Shader",
+      "items": [
+        "graphics/materials",
+        "graphics/writing-shaders",
+        "graphics/shader-reference",
+        "graphics/builtin-shaders",
+        "graphics/porting-from-unity"
+      ]
+    },
+    {
+      "title": "Package",
+      "items": [
+        "packages/using-packages",
+        "packages/creating-packages",
+        "packages/editor-extensions",
+        "packages/build-targets"
+      ]
+    },
+    {
+      "title": "Package chính thức",
+      "items": [
+        "official/spine",
+        "official/spline",
+        "official/cinemachine",
+        "official/ui-toolkit",
+        { "slug": "build/playable-ads", "label": "Playable Ads" }
+      ]
+    },
+    {
+      "title": "Build & phát hành",
+      "items": [
+        "build/build-web",
+        "build/web-editor-agent"
+      ]
+    },
+    {
+      "title": "Tham khảo",
+      "items": [
+        "reference/cli",
+        "reference/project-settings",
+        "reference/faq"
+      ]
+    }
+  ]
+}

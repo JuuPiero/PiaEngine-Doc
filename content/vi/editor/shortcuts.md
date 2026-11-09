@@ -14,6 +14,7 @@ Trong editor: **Help → Keyboard Shortcuts**.
 | Hand / Move / Rotate / Scale / Rect / Transform | <kbd>Q</kbd> / <kbd>W</kbd> / <kbd>E</kbd> / <kbd>R</kbd> / <kbd>T</kbd> / <kbd>Y</kbd> |
 | Snap khi kéo gizmo | Giữ <kbd>Ctrl</kbd>: di chuyển 0.25, xoay 15°, scale 0.1 (Rect tool: 0.05) |
 | Rect tool | Kéo tay cầm để giãn; <kbd>Alt</kbd>: giãn từ tâm; <kbd>Shift</kbd>: giữ tỉ lệ |
+| [Edit Collider](scene-view.md#edit-collider) | <kbd>Alt</kbd> (bấm sau khi đã nhấn chuột): giãn cân hai bên; <kbd>Ctrl</kbd>: snap 0.25; <kbd>Esc</kbd>: thoát |
 | Bay trong Scene view (3D) | Giữ chuột phải + <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>Q</kbd><kbd>E</kbd>, <kbd>Shift</kbd> tăng tốc, lăn chuột đổi tốc độ |
 | Orbit / Pan / Zoom | <kbd>Alt</kbd> + chuột trái / chuột giữa / lăn chuột |
 | Frame selected | <kbd>F</kbd> (hoặc double-click trong Hierarchy) |

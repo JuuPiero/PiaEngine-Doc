@@ -46,6 +46,8 @@ rb.isKinematic; rb.sleep(); rb.wakeUp(); rb.isSleeping();
 | `CircleCollider2D` | `radius` (0.5) |
 | `CapsuleCollider2D` | `size` (0.5, 1), `direction` (`Vertical` / `Horizontal`) |
 
+`offset` đi qua đủ Transform: lật nhân vật bằng scale X = -1 (hoặc xoay Y 180°) thì collider lệch tâm lật theo, như Unity — với cả Rapier lẫn builtin. Bấm **Edit Collider** trên Inspector để kéo cạnh / góc / bán kính ngay trong Scene view ([Edit Collider](../editor/scene-view.md#edit-collider)).
+
 ## Callback
 
 ```ts

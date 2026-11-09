@@ -163,7 +163,7 @@ Hàm vẽ nhận `(gizmos, component, { selected, active })`. Mặc định ch�
 | Nhóm | API của `gizmos` |
 |---|---|
 | Vẽ | `line(from, to, style?)`, `polyline(points, closed?, style?)`, `bezier(p0, c0, c1, p3, style?)`, `circle(center, radius, normal?, style?)`, `disc(...)`, `arrow(from, to, style?)`, `dot(pos, size?, style?)`, `label(pos, text, style?)`, `screenText(x, y, text, style?)` |
-| Handle (trả về giá trị mới khi đang kéo) | `freeMoveHandle(id, pos, options?)`, `positionHandle(id, pos, options?)` (mũi tên X/Y/Z như Move tool), `button(id, pos, options?)` (true ở frame được click) |
+| Handle (trả về giá trị mới khi đang kéo) | `freeMoveHandle(id, pos, options?)`, `positionHandle(id, pos, options?)` (mũi tên X/Y/Z như Move tool), `slider(id, pos, direction, options?)` (kéo dọc một hướng như `Handles.Slider`; ẩn khi camera nhìn dọc theo hướng đó), `button(id, pos, options?)` (true ở frame được click) |
 | Input | `isHovered(id)`, `isDragging(id)`, `pressed(id)`, `clicked(id)`, `sceneClick(id, filter?)` (nhận click vào chỗ trống, ví dụ <kbd>Shift</kbd>+click; click đã nhận không chọn object), `shortcut(key)` (ví dụ `'Delete'`, `'Escape'`) |
 | Khác | `is2D`, `selected`, `color` (màu mặc định), `hideTools()` (ẩn transform tool frame này), `pointer`, `worldToScreen(pos)`, `screenToRay(x, y)`, `pixelSize(pos)` (kích thước world của 1 pixel), `pointerDistance(points)` |
 
@@ -199,7 +199,7 @@ export class Sensor extends MonoBehaviour {
 | API | Hàm |
 |---|---|
 | `Gizmos` | `color`, `matrix` (Matrix4 áp lên mọi điểm), `drawLine`, `drawRay`, `drawLineStrip`, `drawLineList`, `drawWireSphere`, `drawSphere`, `drawWireCube`, `drawCube`, `isDrawing` |
-| `Handles` | `color`, `label(position, text, { size, bold, color })`, `drawLine`, `drawDottedLine`, `drawPolyLine`, `drawWireDisc`, `drawSolidDisc`, `drawArrow`, `positionHandle(position, rotation?)`, `freeMoveHandle(position, size?, snap?)`, `button(position, size?)` |
+| `Handles` | `color`, `label(position, text, { size, bold, color })`, `drawLine`, `drawDottedLine`, `drawPolyLine`, `drawWireDisc`, `drawSolidDisc`, `drawArrow`, `positionHandle(position, rotation?)`, `freeMoveHandle(position, size?, snap?)`, `slider(position, direction, size?, snap?)`, `button(position, size?)` |
 
 `Gizmos.color`, `Handles.color` và `Gizmos.matrix` được đặt lại cho mỗi component. Method vẫn nhận tham số `gizmos` (API `SceneGizmos` ở trên, `import type { SceneGizmos } from '@pia/editor'`) nếu cần thêm hình như `dot` hay `screenText`.
 

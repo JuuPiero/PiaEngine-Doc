@@ -52,6 +52,8 @@ Collider không có Rigidbody (trên chính nó hoặc cha) là **collider tĩnh
 
 `collider.attachedRigidbody` trả về Rigidbody gắn với collider.
 
+Collider đi theo Transform (vị trí, xoay, scale); `center` đi qua đủ Transform nên object scale âm (lật) thì collider lệch tâm cũng lật theo, đúng như đường viền xanh trong Scene view. Bấm **Edit Collider** trên Inspector để kéo mặt / bán kính / chiều cao ngay trong Scene view ([Edit Collider](../editor/scene-view.md#edit-collider)); đổi `size` / `radius` / `height` / `center` khi đang Play thì bước vật lý kế tiếp dùng hình mới.
+
 ## Callback
 
 Gửi tới các script trên object của collider **và** object của Rigidbody:

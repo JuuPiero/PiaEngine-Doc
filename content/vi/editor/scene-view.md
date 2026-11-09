@@ -60,3 +60,28 @@ Giữ <kbd>Ctrl</kbd> khi kéo gizmo:
 Chọn một object có **Particle System** thì hiệu ứng tự chạy trong Scene view, kèm bảng **Particle Effect** (Pause / Restart, thời gian, số hạt). Xem [Particle System](../components/particle-system.md).
 
 Chọn một object có **Line Renderer** thì các điểm của đường hiện thành chấm trắng: kéo để di chuyển, bấm vào một điểm để có mũi tên theo trục (<kbd>Esc</kbd> để thoát). Xem [Line Renderer & Trail Renderer](../components/line-trail-renderer.md).
+
+## Edit Collider
+
+Như Unity: Inspector của **Box Collider**, **Sphere Collider**, **Capsule Collider**, **Character Controller**, **Box Collider 2D**, **Circle Collider 2D** và **Capsule Collider 2D** có dòng **Edit Collider** với một nút (icon khung có chấm). Bấm nút → collider hiện các chấm vuông xanh trong Scene view (2D lẫn 3D) và transform tool tạm ẩn. Kéo chấm để đổi kích thước collider ngay trên scene:
+
+| Collider | Chấm | Kéo thì |
+|---|---|---|
+| Box Collider | 6 chấm giữa 6 mặt | mặt đó đi dọc pháp tuyến, **mặt đối diện đứng yên** → `size` và `center` cùng đổi |
+| Box Collider 2D | 4 chấm giữa 4 cạnh + 4 chấm tròn ở góc | cạnh như trên (`size` + `offset`); chấm góc kéo hai cạnh một lúc |
+| Sphere Collider / Circle Collider 2D | 6 / 4 chấm trên mặt cầu / đường tròn | `radius`, tâm đứng yên |
+| Capsule Collider (theo `direction`) / Character Controller (luôn đứng thẳng) | 4 chấm bán kính quanh thân + 2 chấm ở hai đầu | chấm đầu: `height`, đầu kia đứng yên (`center` dời theo); chấm thân: `radius` |
+| Capsule Collider 2D | 4 chấm trên khung bao (theo hướng xoay của object) | `size` + `offset` như Box Collider 2D |
+
+| Phím khi kéo | Tác dụng |
+|---|---|
+| <kbd>Alt</kbd> (bấm **sau khi** đã nhấn chuột — <kbd>Alt</kbd> + chuột trái trước là orbit / pan) | Đổi cân hai bên, tâm đứng yên. Nhả <kbd>Alt</kbd> giữa chừng là quay lại kiểu một bên. |
+| <kbd>Ctrl</kbd> | Snap quãng kéo theo bước 0.25 (như Move tool) |
+| <kbd>Esc</kbd> | Thoát chế độ Edit Collider |
+
+- Chấm đổi vàng khi rê chuột tới; chấm ở mặt quay lưng về camera mờ hơn. Khi kéo có nhãn giá trị cạnh chuột, Inspector cập nhật liền.
+- Đúng cả với object xoay, scale không đều, scale âm (lật): chấm nằm đúng chỗ đường viền xanh của collider.
+- Giá trị không âm: kéo một mặt quá mặt đối diện thì kích thước dừng ở 0. Capsule: kéo bán kính quá nửa chiều cao thì `height` tăng theo; rút `height` dưới 2 × bán kính thì bán kính nhỏ lại.
+- Mỗi lần kéo là **một bước Undo** (<kbd>Ctrl</kbd>+<kbd>Z</kbd>), scene được đánh dấu đã sửa.
+- Dùng được trong **Play Mode**: vật lý (Rapier lẫn builtin) dùng hình mới từ bước kế tiếp; giá trị trở lại khi Stop như mọi thay đổi trong Play Mode.
+- Mỗi lúc chỉ sửa một collider. Thoát bằng <kbd>Esc</kbd>, bấm lại nút, chọn object khác hoặc chọn tool khác (<kbd>Q</kbd> <kbd>W</kbd> <kbd>E</kbd> <kbd>R</kbd> <kbd>T</kbd> <kbd>Y</kbd>). Khi chọn nhiều object, chỉ collider của object **active** (chọn sau cùng) được sửa.

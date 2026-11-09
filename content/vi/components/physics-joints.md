@@ -98,7 +98,7 @@ Di chuyển có va chạm **không cần Rigidbody** (như `CharacterController`
 | Step Offset | `0.3` | Bậc cao nhất tự bước lên |
 | Skin Width | `0.08` | Khoảng hở giữa capsule và collider khác |
 | Min Move Distance | `0.001` | Di chuyển ngắn hơn bị bỏ qua |
-| Radius / Height | `0.5` / `2` | Kích thước capsule |
+| Radius / Height | `0.5` / `2` | Kích thước capsule (kéo trong Scene view bằng nút **Edit Collider**, xem [Edit Collider](../editor/scene-view.md#edit-collider)) |
 | Center, Is Trigger… | | Như các collider khác |
 
 ```ts

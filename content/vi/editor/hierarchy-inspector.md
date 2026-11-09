@@ -58,6 +58,15 @@ Unity dùng <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> cho Create Empty, như
 - **Danh sách** (`@field([X])`): thả lên **tiêu đề danh sách** để thêm phần tử vào cuối. Kéo nhiều object từ Hierarchy là thêm cả loạt; thứ sai kiểu bị bỏ qua. Một bước Undo.
 - **Script**: thả file script từ Project lên Inspector của object để gắn component của script đó (như kéo script lên object trong Hierarchy).
 
+### Click vào ô tham chiếu (ping)
+
+Giống Unity:
+
+- **Click** vào ô đã có giá trị: thứ được tham chiếu **nháy sáng** mà selection không đổi. Object trong scene → Hierarchy tự mở các object cha và cuộn tới; asset (prefab, material, texture, ScriptableObject, file script…) → cửa sổ Project mở thư mục chứa nó và cuộn tới; sprite con của sprite sheet hoặc mesh / material / clip của model → mở rộng file gốc.
+- **Double-click**: chọn hẳn object / asset đó (ô **Script**: mở file trong code editor).
+
+Trong cửa sổ Project, **Ctrl + lăn chuột** phóng to / thu nhỏ icon (như thanh trượt ở góc dưới); lăn thường vẫn cuộn.
+
 ### Khoá Inspector
 
 Nút **ổ khoá** góc trên Inspector giữ nguyên object / asset đang xem khi bạn chọn thứ khác — dùng để kéo object khác vào field của object đang khoá. Bấm lại để mở khoá (Inspector chuyển sang thứ đang được chọn). Nếu object đang khoá bị xoá, Inspector báo và chờ bạn mở khoá.

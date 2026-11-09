@@ -24,6 +24,7 @@ Editor tự nạp lại khi `package.json` thay đổi.
 **Window → Package Manager**:
 
 - Nút **+**: **Add package by name / git URL…**, **Add package from disk…**, **Create new package…**.
+- **Package bị thiếu** (clone project sang máy khác mà thư mục `file:` chỉ có trên máy cũ, hoặc chưa `npm install`): editor vẫn mở, Console báo package thiếu và lý do, component của nó trong scene thành Missing Component (giữ nguyên dữ liệu). Chọn package có dấu ⚠ trong Package Manager → **Locate…** (chọn thư mục package trên máy này), **Install missing** hoặc **Remove**. Khi còn package thiếu, lưu scene sẽ được hỏi lại và build báo lỗi.
 - **Add package from disk…**: gõ đường dẫn hoặc bấm **Browse…** để chọn thư mục bằng hộp thoại của hệ điều hành (Windows / macOS / Linux có zenity hoặc kdialog). Thư mục cùng ổ đĩa được ghi thành đường dẫn tương đối so với project (`file:../...`).
 - Bộ lọc: *In Project*, *Pia packages only*, *Embedded (being developed)*.
 - Nút **npm install** (hoặc **Install missing** khi có package chưa cài) chạy `npm install` trong thư mục project.

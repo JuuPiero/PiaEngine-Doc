@@ -51,6 +51,22 @@ Chuột phải lên asset: **Open**, **Instantiate in Scene** (prefab), **Rename
 
 **Create** (chuột phải trong cửa sổ Project, hoặc nút **+** của nó): Folder, TypeScript Script, ScriptableObject Script, Scene, Animation Clip, Material, Shader (Sprite / Lit / Unlit), Scriptable Object, và các mục do `@createAssetMenu` thêm. Menu **Assets → Create** ở thanh menu có các mục cơ bản (Folder, Script, Scene, Animation Clip).
 
+### Ảnh xem trước
+
+Như AssetPreview của Unity, icon trong cửa sổ Project là ảnh của chính asset:
+
+| Asset | Ảnh |
+|---|---|
+| Texture | ảnh gốc |
+| Material (`.mat.json`, material con của model) | quả cầu phủ material — đúng shader dựng sẵn lẫn shader tự viết (lit / unlit) |
+| Model (FBX / glTF / OBJ), mesh con của model | object với material import của nó, góc nhìn 3/4, tự canh khung |
+| Prefab | object của prefab (prefab 2D toàn sprite thì nhìn thẳng) |
+
+- Trong lúc chờ vẽ, ô hiện icon loại file như cũ. Material 2D (shader sprite) và prefab không có gì để vẽ (chỉ particle, chỉ UI) giữ nguyên icon.
+- Ảnh tự cập nhật khi sửa material trong Inspector, sửa / hot reload shader, re-import model, đổi texture hay sửa prefab (kể cả prefab dùng material vừa sửa).
+- Chỉ vẽ các ô đang thấy, từng ảnh một lúc editor rảnh, độ phân giải theo cỡ icon. Mọi ảnh dùng chung **một** renderer WebGL ẩn và một scene riêng: không đụng tới scene đang mở, Undo, selection hay Play Mode.
+- Ô tham chiếu trong Inspector (material, mesh, prefab) cũng hiện ảnh nhỏ này. Xem thêm khung [Preview trong Inspector](../editor/hierarchy-inspector.md#asset-trong-inspector).
+
 ## Tham chiếu asset trong code
 
 Field asset trong component giữ **chuỗi tham chiếu**. Các dạng chuỗi engine hiểu:

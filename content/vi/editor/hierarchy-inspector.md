@@ -65,7 +65,7 @@ Giống Unity:
 - **Click** vào ô đã có giá trị: thứ được tham chiếu **nháy sáng** mà selection không đổi. Object trong scene → Hierarchy tự mở các object cha và cuộn tới; asset (prefab, material, texture, ScriptableObject, file script…) → cửa sổ Project mở thư mục chứa nó và cuộn tới; sprite con của sprite sheet hoặc mesh / material / clip của model → mở rộng file gốc.
 - **Double-click**: chọn hẳn object / asset đó (ô **Script**: mở file trong code editor).
 
-Trong cửa sổ Project, **Ctrl + lăn chuột** phóng to / thu nhỏ icon (như thanh trượt ở góc dưới); lăn thường vẫn cuộn.
+Trong cửa sổ Project, **Ctrl + lăn chuột** phóng to / thu nhỏ icon (như thanh trượt ở góc dưới); lăn thường vẫn cuộn. Ô tham chiếu material / mesh / prefab hiện [ảnh xem trước](../assets/overview.md#anh-xem-truoc) nhỏ của asset.
 
 ### Khoá Inspector
 
@@ -85,4 +85,5 @@ Chọn asset trong Project để sửa:
 
 - Import settings của texture (Texture Type, sRGB, Mip Maps, Wrap / Filter Mode, Pixels Per Unit, nén khi build — xem [Texture & Sprite](../assets/textures-sprites.md)) và model (Scale Factor…).
 - Material (shader + thuộc tính), ScriptableObject (field của class) — tự lưu, có Undo.
+- **Preview** ở cuối Inspector của material, prefab, mesh / material con của model (như khung preview của Unity): **kéo chuột** để xoay (vẫn xoay khi chuột ra khỏi khung), **lăn chuột** để zoom, **double-click** hoặc nút ⛶ để về góc nhìn ban đầu. Material chọn được hình (**Sphere / Cube / Cylinder / Capsule / Plane / Quad**), nút bóng đèn bật / tắt đèn chính (tắt: chỉ còn ánh sáng môi trường). Sửa material thì preview vẽ lại ngay nhưng giữ góc đang xoay. Khung chỉ vẽ khi bạn kéo / khi asset đổi. Model (file FBX / glTF...) có preview riêng phát được clip ở tab Animation, cũng kéo / zoom / double-click như vậy.
 - Shader: xem thuộc tính, nút **Create Material**.

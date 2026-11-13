@@ -33,8 +33,24 @@ Tạo nhanh: **GameObject → UI → Canvas / Panel / Image / Text / Button / Ev
 const rt = this.getComponent(RectTransform)!;
 rt.setAnchorPreset('top-right');      // top-left … bottom-right, middle-center, stretch
 rt.anchoredPosition = new Vector2(-20, -20);
+rt.offsetMin = new Vector2(10, 10);   // góc dưới-trái so với anchor (Left / Bottom)
+rt.offsetMax = new Vector2(-10, -10); // góc trên-phải so với anchor (−Right / −Top)
 rt.rect;                              // { x, y, width, height } sau lần layout gần nhất
 ```
+
+### Trong Inspector
+
+Giống Unity: object có `RectTransform` không hiện khối Transform riêng nữa. **Pos Z**, **Rotation**, **Scale** nằm luôn trong khối Rect Transform.
+
+- **Ô Anchor Presets** (ô vuông bên trái, ghi preset hiện tại, ví dụ `center` / `middle`; `custom` nếu anchor không khớp preset nào): bấm để mở bảng 4 × 4 (left / center / right / stretch × top / middle / bottom / stretch).
+  - Bấm thường: chỉ đổi anchor, phần tử **giữ nguyên chỗ** trên màn hình.
+  - Giữ <kbd>Shift</kbd>: đặt luôn **pivot** theo preset (chấm xanh trên icon).
+  - Giữ <kbd>Alt</kbd>: đặt luôn **vị trí**: neo sát anchor, hoặc phủ kín cha nếu là stretch. <kbd>Shift</kbd> + <kbd>Alt</kbd> + stretch / stretch là phủ kín Canvas.
+- **Pos X / Pos Y / Width / Height** khi anchor là một điểm. Khi anchor bị kéo giãn theo trục nào thì cặp ô của trục đó đổi thành **Left / Right** (X) hoặc **Top / Bottom** (Y): khoảng cách tới mép cha.
+- Kéo nhãn của ô để thay đổi giá trị (như các field khác).
+- **Anchors** (Min / Max) và **Pivot**: sửa trực tiếp thì phần tử vẫn giữ nguyên chỗ.
+- Nút **R** (Raw edit mode): sửa Anchors / Pivot mà không bù lại vị trí / kích thước, nên phần tử sẽ dịch trên màn hình.
+- Chọn nhiều object vẫn sửa được: giá trị khác nhau hiện **—**, mỗi thao tác là một bước Undo.
 
 ## Image
 

@@ -198,12 +198,12 @@ ENDVERTEX
 ## Chưa hỗ trợ
 
 - Shader 2D tự viết cho sprite trong scene 3D; vertex program cho sprite 2D.
-- Đọc màn hình hoặc depth (GrabPass, khúc xạ, nước thật), post-processing, RenderTexture.
+- Đọc màn hình hoặc depth trong shader (GrabPass, khúc xạ, nước thật). Hiệu ứng toàn màn hình: [Post Effect](graphics-api.md#post-effect); vẽ vào texture: [RenderTexture](render-texture.md).
 - Nhiều `Pass` trong một file (dùng nhiều material thay thế), keyword / variant, `#include`.
 - Material cho UI và Particle System.
 - Bóng đổ chưa tính `clip()` và dịch đỉnh trong shader.
 - `ColorMask` chỉ bật hoặc tắt hết (không tắt riêng từng kênh).
-- Cubemap, MaterialPropertyBlock.
+- Cubemap.
 - Compute / geometry / tessellation shader (giới hạn của WebGL2).
 
 Tiếp: [Render state & thuộc tính](shader-reference.md), [Shader dựng sẵn](builtin-shaders.md).

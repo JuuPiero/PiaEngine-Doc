@@ -73,4 +73,4 @@ Shader "Custom/Rim"
 
 ## Không port được (chưa hỗ trợ)
 
-GrabPass, depth texture, post-processing, RenderTexture, nhiều Pass trong một file, keyword / variant, `#include`, cubemap, compute / geometry / tessellation shader. Xem danh sách đầy đủ ở [Viết shader](writing-shaders.md#chua-ho-tro).
+GrabPass, depth texture, post-processing stack (Bloom, Color Grading — tự viết bằng [Post Effect](graphics-api.md#post-effect)), CommandBuffer, nhiều Pass trong một file, keyword / variant, `#include`, cubemap, compute / geometry / tessellation shader. Xem danh sách đầy đủ ở [Viết shader](writing-shaders.md#chua-ho-tro).

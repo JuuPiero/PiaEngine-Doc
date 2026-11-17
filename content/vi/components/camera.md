@@ -17,6 +17,7 @@ Vẽ scene cho Game view (`UnityEngine.Camera`). Camera nhìn theo trục **-Z c
 | Size | `orthographicSize` | `5` | Nửa chiều cao khung nhìn (unit), khi Orthographic |
 | Clipping Near / Far | `nearClipPlane`, `farClipPlane` | `0.3`, `1000` | |
 | Depth | `depth` | `0` | Thứ tự vẽ: camera depth cao vẽ sau (đè lên) |
+| Target Texture | `targetTexture` | None | Vẽ vào [RenderTexture](../graphics/render-texture.md) thay cho màn hình (minimap, picture-in-picture) |
 
 ## Main camera
 

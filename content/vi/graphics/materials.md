@@ -124,5 +124,5 @@ Một nhóm được cull theo khung bao của cả nhóm (không cull từng ob
 - Demo3D: `Assets/Shaders/Hologram.shader` (rim + scanline + vertex wobble) trên Shiny Sphere.
 
 ::: note Chưa hỗ trợ
-Material cho UI và Particle System; `MaterialPropertyBlock`.
+Material cho UI và Particle System. Đổi giá trị từng renderer mà không sao chép material: [MaterialPropertyBlock](graphics-api.md#materialpropertyblock).
 :::

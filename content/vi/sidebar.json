@@ -78,7 +78,10 @@
         "graphics/writing-shaders",
         "graphics/shader-reference",
         "graphics/builtin-shaders",
-        "graphics/porting-from-unity"
+        "graphics/porting-from-unity",
+        "graphics/render-texture",
+        "graphics/texture2d",
+        "graphics/graphics-api"
       ]
     },
     {

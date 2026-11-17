@@ -67,6 +67,23 @@ Giống Unity: object có `RectTransform` không hiện khối Transform riêng 
 
 Border 9-slice đặt trong [Sprite Editor](../assets/sprite-editor.md) — dùng cho khung, nút, thanh máu giãn được mà không méo góc.
 
+## Raw Image
+
+**UI ▸ Raw Image** (`RawImage`, như Unity) hiện một **texture**: texture asset, [RenderTexture](../graphics/render-texture.md) (ví dụ ảnh của camera minimap) hoặc [Texture2D](../graphics/texture2d.md) tạo lúc chạy.
+
+| Thuộc tính | Field | Mặc định | Mô tả |
+|---|---|---|---|
+| Texture | `texture` | None | Texture asset hoặc Render Texture (trong code: mọi `Texture`) |
+| Color | `color` | trắng | Nhân màu |
+| Raycast Target | `raycastTarget` | `true` | Chặn click xuống game |
+
+```ts
+rawImage.texture = minimapCamera.targetTexture;
+rawImage.uvRect = new Rect(0.25, 0.25, 0.5, 0.5);   // chỉ hiện một phần (lúc chạy)
+```
+
+UI là DOM nên Raw Image chép nội dung render texture từ GPU mỗi khi nó thay đổi (giữ texture nhỏ, 256–512 px); Texture2D được chép khi `apply()`.
+
 ## Text
 
 | Thuộc tính | Field | Mặc định |

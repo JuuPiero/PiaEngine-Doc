@@ -55,6 +55,7 @@
         "components/audio",
         "components/ui",
         "components/animation",
+        "components/animator-controller",
         "components/particle-system",
         "components/line-trail-renderer"
       ]
@@ -90,6 +91,7 @@
         "packages/using-packages",
         "packages/creating-packages",
         "packages/editor-extensions",
+        "packages/editor-scripting-imgui",
         "packages/build-targets"
       ]
     },
@@ -100,6 +102,9 @@
         "official/spline",
         "official/cinemachine",
         "official/ui-toolkit",
+        "official/injector",
+        "official/tween",
+        "official/entities",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]
     },

@@ -10,7 +10,11 @@ Script mở rộng editor (tương đương thư mục `Editor/`, `[MenuItem]`, 
 - `Assets/**/Editor/*.ts` (hoặc `.tsx`) trong project, hoặc
 - entry `editor` (`Editor/index.ts`) của một package.
 
-Code này **chỉ chạy trong editor** và không bao giờ vào bản build. Export mặc định là kết quả của `defineEditorExtension`:
+Code này **chỉ chạy trong editor** và không bao giờ vào bản build.
+
+> Muốn viết y như Unity (`EditorWindow` + `OnGUI`, `[CustomEditor]`, `PropertyDrawer`, `[MenuItem]`, `EditorGUILayout`, `SerializedObject`)? Xem [Editor scripting (IMGUI)](editor-scripting-imgui.md) — hai cách dùng chung được trong một project.
+
+Export mặc định là kết quả của `defineEditorExtension`:
 
 ```ts Assets/Editor/SceneTools.ts
 import { defineEditorExtension } from '@pia/editor';

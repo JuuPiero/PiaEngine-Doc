@@ -33,10 +33,11 @@ Clip có sẵn trong file glTF / FBX là sub-asset của model (`"<guidModel>#cl
 
 ## Animator
 
-Object gốc của model có **Animator** (Add Component → Miscellaneous → Animator). Clip chạy trên Transform của các GameObject trong cây (vị trí, rotation quaternion nội suy slerp, scale, blend shape của SkinnedMeshRenderer), nên script đọc / sửa được tư thế như mọi object. Chưa có state machine (Animator Controller): đổi clip bằng tên.
+Object gốc của model có **Animator** (Add Component → Miscellaneous → Animator). Clip chạy trên Transform của các GameObject trong cây (vị trí, rotation quaternion nội suy slerp, scale, blend shape của SkinnedMeshRenderer), nên script đọc / sửa được tư thế như mọi object. Hai cách dùng: gắn một **[Animator Controller](animator-controller.md)** vào ô **Controller** (state machine, transition, parameter, blend tree, layer — như Unity), hoặc để trống và đổi clip bằng tên như dưới đây.
 
 | Thuộc tính | Field | Mặc định | Mô tả |
 |---|---|---|---|
+| Controller | `runtimeAnimatorController` | | [Animator Controller](animator-controller.md) (hoặc Override Controller). Khi có, các ô Clips / Default Clip / Play Automatically / Wrap Mode bị ẩn |
 | Clips | `clips` | các clip của model | Clip phát được: clip của model hoặc `.anim.json` |
 | Default Clip | `defaultClip` | | Clip tự phát (trống = clip đầu tiên) |
 | Play Automatically | `playAutomatically` | `true` | Tự phát khi bật |
@@ -77,7 +78,7 @@ Script không đổi (`play`, `crossFade`, `speed`, `time`, `normalizedTime`, `s
 Ví dụ BusGo (~380 hành khách, 6 màu): Batches **376 → 75** (hành khách từ ~370 draw call còn 7), build web 90 → 133 FPS (GTX 1650).
 
 ::: tip Giới hạn
-Chỉ clip của model (không `.anim.json`); mesh có blend shape tự dùng cách cũ. `crossFade` trộn ma trận xương (gần giống trộn từng xương; xương không có trong clip mới về tư thế bind thay vì giữ tư thế cũ). Một nhóm được cull theo khung bao chung; nhân vật scale âm trong cùng nhóm bị lật mặt. Chưa có MaterialPropertyBlock (màu riêng từng instance).
+Chỉ clip của model (không `.anim.json`); mesh có blend shape tự dùng cách cũ. Với [Animator Controller](animator-controller.md), GPU trộn tối đa 2 tư thế: hai clip của model có trọng số lớn nhất ở layer 0. `crossFade` trộn ma trận xương (gần giống trộn từng xương; xương không có trong clip mới về tư thế bind thay vì giữ tư thế cũ). Một nhóm được cull theo khung bao chung; nhân vật scale âm trong cùng nhóm bị lật mặt. Chưa có MaterialPropertyBlock (màu riêng từng instance).
 :::
 
 
@@ -127,5 +128,5 @@ Mỗi đường cong (curve) gắn với **đường dẫn con** tính từ obje
 Clip trên (Demo3D) đưa platform lên xuống trong 4 giây. Một event có dạng `{ "time": 2, "function": "onTurn", "argument": "..." }`. Key có thể có `"i"`: `"smooth"` (mặc định, tiếp tuyến tự động như Auto key của Unity), `"linear"` hoặc `"constant"`.
 
 ::: note Chưa hỗ trợ
-Animator (state machine, blend tree, transition), chỉnh tiếp tuyến bằng tay, curve editor, keyframe **sprite** (đổi sprite theo frame — tạm dùng script, xem [Sprite Editor](../assets/sprite-editor.md#dung-sprite-con)). Animation xương: package [Spine](../official/spine.md).
+Chỉnh tiếp tuyến bằng tay, curve editor, keyframe **sprite** (đổi sprite theo frame — tạm dùng script, xem [Sprite Editor](../assets/sprite-editor.md#dung-sprite-con)). Animation xương: package [Spine](../official/spine.md).
 :::

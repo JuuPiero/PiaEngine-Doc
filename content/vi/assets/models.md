@@ -143,7 +143,7 @@ Giống Mesh Compression / Anim. Compression của Unity, để bản build (web
 Trong script, thay `getComponent(ModelRenderer).play('Wave', 0.3)` bằng `getComponentInChildren(Animator).crossFade('Wave', 0.3)`.
 
 ::: note Chưa hỗ trợ
-- Humanoid / retarget, state machine của Animator (Animator Controller), root motion, blend nhiều layer.
+- Humanoid / retarget, root motion. (State machine, blend tree, layer: [Animator Controller](../components/animator-controller.md).)
 - MeshCollider từ mesh của model, LOD, lightmap UV.
 - Sửa clip của model trong cửa sổ Animation (cửa sổ này dành cho clip `.anim.json`).
 - OBJ: file `.mtl` chưa được đọc khi hiển thị — gán material bằng Remapped Materials.

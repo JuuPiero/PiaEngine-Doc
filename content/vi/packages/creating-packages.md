@@ -83,19 +83,19 @@ CustomRenderers.register(Ring, '2d', renderer);
 - Script trong project cũng gọi `CustomRenderers.register` trực tiếp được (khi đó import thư viện của pipeline theo kiểu tĩnh).
 - Ví dụ thật: `pia-packages/com.pia.spine` (`Runtime/Pixi/SpinePixiRenderer.ts`, `Runtime/Three/SpineThreeRenderer.ts`).
 
-## Ví dụ: com.pia.tween
+## Ví dụ: com.example.pulse
 
-Project Demo3D có package nhúng `Packages/com.pia.tween`:
+Project Demo3D có package nhúng `Packages/com.example.pulse` (tên package nhúng phải khác tên package cài qua npm: cùng tên thì bản trong `Packages/` che mất bản kia — Demo3D cũng cài package tween thật `com.pia.tween`):
 
-```ts Packages/com.pia.tween/Runtime/index.ts
+```ts Packages/com.example.pulse/Runtime/index.ts
 import { Mathf, MonoBehaviour, Time, Vector3, field, type CoroutineGenerator, type Transform } from '@pia/core';
 
 /** Tween helpers built on coroutines. */
-export const Tween = {
-  *moveTo(t: Transform, target: Vector3, duration: number, ease: EaseName = 'inOutQuad'): CoroutineGenerator {
+export const PulseTween = {
+  *moveTo(t: Transform, target: Vector3, duration: number, ease: PulseEaseName = 'inOutQuad'): CoroutineGenerator {
     const from = t.position;
     for (let e = 0; e < duration; e += Time.deltaTime) {
-      t.position = Vector3.lerp(from, target, Ease[ease](e / duration));
+      t.position = Vector3.lerp(from, target, PulseEase[ease](e / duration));
       yield null;
     }
     t.position = target;
@@ -111,18 +111,18 @@ export class PulseScale extends MonoBehaviour {
 }
 ```
 
-- `PulseScale` hiện trong **Add Component → Packages/com.pia.tween**.
-- Script trong project dùng: `this.startCoroutine(Tween.moveTo(this.transform, new Vector3(0, 3, 0), 1, 'outBack'))`.
-- Phần Editor thêm menu **Tools → Tween**:
+- `PulseScale` hiện trong **Add Component → Packages/com.example.pulse**.
+- Script trong project dùng: `import { PulseTween } from 'com.example.pulse'` rồi `this.startCoroutine(PulseTween.moveTo(this.transform, new Vector3(0, 3, 0), 1, 'outBack'))`.
+- Phần Editor thêm menu **Tools → Pulse Sample**:
 
-```ts Packages/com.pia.tween/Editor/index.ts
+```ts Packages/com.example.pulse/Editor/index.ts
 import { defineEditorExtension } from '@pia/editor';
 import { ComponentRegistry } from '@pia/core';
 
-/** Editor-only part of the Tween package (never included in game builds). */
+/** Editor-only part of the Pulse sample package (never included in game builds). */
 export default defineEditorExtension((ctx) => {
   ctx.addMenuItem(
-    'Tools/Tween/Add Pulse To Selection',
+    'Tools/Pulse Sample/Add Pulse To Selection',
     () => {
       const info = ComponentRegistry.get('PulseScale');
       if (!info) return;

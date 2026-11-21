@@ -106,6 +106,7 @@
         "official/tween",
         "official/animancer",
         "official/entities",
+        "official/netcode",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]
     },

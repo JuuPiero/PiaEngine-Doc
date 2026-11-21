@@ -107,6 +107,7 @@
         "official/animancer",
         "official/entities",
         "official/netcode",
+        "official/textmeshpro",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]
     },

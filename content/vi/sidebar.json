@@ -104,6 +104,7 @@
         "official/ui-toolkit",
         "official/injector",
         "official/tween",
+        "official/animancer",
         "official/entities",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]

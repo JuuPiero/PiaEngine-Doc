@@ -108,6 +108,7 @@
         "official/entities",
         "official/netcode",
         "official/textmeshpro",
+        "official/tilemap",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]
     },

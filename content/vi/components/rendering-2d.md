@@ -18,6 +18,7 @@ Scene pipeline **2D (PixiJS)** dùng world unit như Unity 2D: trục Y hướng
 | Flip X / Flip Y | `flipX`, `flipY` | `false` | Lật ảnh |
 | Draw Mode | `drawMode` | `Simple` | `Simple`: kích thước theo ảnh. `Sliced`: 9-slice giãn tới **Size** (góc giữ nguyên). `Tiled`: góc giữ nguyên, cạnh và tâm lặp lại. Dùng border đặt trong Sprite Editor |
 | Size | `size` | `(1, 1)` | Kích thước (unit, local) khi Sliced / Tiled. Rect tool (<kbd>T</kbd>) sửa Size như Unity |
+| Mask Interaction | `maskInteraction` | `None` | `VisibleInsideMask`: chỉ hiện bên trong các [Sprite Mask](#sprite-mask); `VisibleOutsideMask`: chỉ hiện bên ngoài |
 | Materials | `sharedMaterials` | `[]` | Danh sách material, mỗi material vẽ sprite thêm một lần (multi-pass). Rỗng = `Sprites/Default`. Xem [Material](../graphics/materials.md) |
 | Order in Layer | `sortingOrder` | `0` | Thứ tự vẽ: số lớn vẽ đè lên |
 | Pixels Per Unit | `pixelsPerUnit` | `100` | **Hệ số** nhân với PPU của texture: 100 = dùng đúng Pixels Per Unit trong import settings |
@@ -38,6 +39,31 @@ sr.sprite = this.hurtSprite;          // field @field({ assetType: 'sprite' })
 ### Thứ tự vẽ
 
 Sprite được sắp theo **Order in Layer**, rồi theo **Z**, rồi theo thứ tự trong Hierarchy.
+
+## Sprite Mask
+
+Che / khoét sprite theo hình một sprite khác, như `SpriteMask` của Unity. **Add Component → Rendering → Sprite Mask**.
+
+| Thuộc tính | Field | Mặc định | Mô tả |
+|---|---|---|---|
+| Sprite | `sprite` | `builtin:Circle` | Hình của mask (bản thân mask **không được vẽ**) |
+| Alpha Cutoff | `alphaCutoff` | `0.2` | Pixel có alpha lớn hơn giá trị này thuộc về mask |
+| Custom Range | `isCustomRangeActive` | `false` | Bật: mask chỉ ảnh hưởng renderer có Order in Layer trong khoảng (Back, Front] |
+| Front Order / Back Order | `frontSortingOrder`, `backSortingOrder` | `0`, `-1` | Khoảng Order in Layer khi bật Custom Range |
+
+- Renderer chọn cách phản ứng bằng **Mask Interaction**: *Visible Inside Mask* chỉ hiện trong **hợp** của mọi mask ảnh hưởng tới nó, *Visible Outside Mask* chỉ hiện bên ngoài. Không có mask nào: Visible Inside thì không vẽ, Visible Outside thì vẽ bình thường (như Unity).
+- Dùng được cho `SpriteRenderer` và `TilemapRenderer` (package [Tilemap](../official/tilemap.md)); chạy cả pipeline 2D (PixiJS) lẫn 3D (three.js) bằng stencil buffer.
+- Mask có thể di chuyển / xoay / co giãn và đổi sprite lúc chạy (ví dụ vùng sáng quanh nhân vật, cửa sổ nhìn xuyên tường).
+- Chọn object có Sprite Mask: Scene view vẽ **viền xanh ngọc** theo đúng hình mask (phần pixel trên Alpha Cutoff).
+
+```ts
+import { SpriteMask, SpriteRenderer } from '@pia/core';
+
+const mask = this.gameObject.addComponent(SpriteMask);
+mask.sprite = 'builtin:Circle';
+mask.alphaCutoff = 0.5;
+this.map.getComponent(SpriteRenderer)!.maskInteraction = 'VisibleInsideMask';
+```
 
 ## TextRenderer
 

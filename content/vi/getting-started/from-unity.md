@@ -42,6 +42,7 @@ PiaEngine cố ý giữ **tên và hành vi của Unity**. Khác biệt chính: 
 | `Animation` + `.anim`, cửa sổ Animation | `Animation` + `.anim.json`, Window → Animation (<kbd>Ctrl</kbd>+<kbd>6</kbd>), nút Record, animation event |
 | Model import (FBX/glTF/OBJ), model prefab, `SkinnedMeshRenderer`, `Animator` (`Play`, `CrossFade`), ModelImporter (Model / Rig / Animation / Materials, Convert Units, Extract Materials) | kéo model vào Scene → cây GameObject liên kết với model, cùng tên component / field; state machine: [Animator Controller](../components/animator-controller.md). Xem [Model 3D](../assets/models.md) |
 | Sprite Editor, Sprite Mode Multiple, 9-slice, Draw Mode Sliced / Tiled | Giống Unity — xem [Sprite Editor & 9-slice](../assets/sprite-editor.md) |
+| `SpriteMask`, `SpriteRenderer.maskInteraction` (Visible Inside / Outside Mask, Custom Range) | Cùng tên — xem [Sprite Mask](../components/rendering-2d.md#sprite-mask) |
 | Odin Inspector (`[Button]`, `[ShowIf]`, `[BoxGroup]`…), `CustomPropertyDrawer` | `@button`, `@showIf`, `@boxGroup`… trong `@pia/core`, `ctx.registerPropertyDrawer` — xem [Inspector attributes](../scripting/inspector-attributes.md) |
 | `OnDrawGizmos`, `Gizmos.DrawWireSphere`, `Handles.Label`, `OnSceneGUI` | `onDrawGizmos()` với `Gizmos.drawWireSphere`, `Handles.label`…, hoặc `ctx.registerSceneGizmo` — xem [Editor extension](../packages/editor-extensions.md#gizmo-va-handle-trong-scene-view) |
 | `TextAsset` | `TextAsset`, `JsonAsset<T>` (đã parse), `BufferAsset` (nhị phân) — xem [TextAsset](../scripting/text-assets.md) |

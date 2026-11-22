@@ -1,11 +1,11 @@
 ---
 title: 2D Tilemap
-description: Package com.pia.tilemap — Tilemap + 2D Tilemap Extras của Unity cho PiaEngine: Grid chữ nhật / lục giác / isometric, Rule Tile, Animated Tile, GameObject tile (dựng màn 3D), va chạm Tilemap + Composite Collider 2D, cửa sổ Tile Palette với brush.
+description: Package com.pia.tilemap — Tilemap + 2D Tilemap Extras của Unity cho PiaEngine: Grid chữ nhật / lục giác / isometric, Rule Tile, Animated Tile, GameObject tile (dựng màn 3D, chế độ DrawOnly vẽ GPU instancing), shader GLSL tuỳ biến, Sprite Mask, va chạm Tilemap / Composite Collider 2D và Tilemap Collider 3D, cửa sổ Tile Palette với brush.
 ---
 
 # 2D Tilemap (`com.pia.tilemap`)
 
-Package tilemap theo `com.unity.2d.tilemap` và `com.unity.2d.tilemap.extras` của Unity, tên API viết camelCase: **Grid** (chữ nhật, lục giác point / flat top, isometric, isometric Z as Y, mọi swizzle), **Tilemap**, **TilemapRenderer** (gộp chunk trong PixiJS và three.js), các loại tile (**Tile, RuleTile, AnimatedTile, Random / Weighted Random, Pipeline, Terrain, Hexagonal / Isometric Rule Tile, Rule Override / Advanced Rule Override**), **GameObject tile** (mỗi ô một prefab — dựng màn 3D trên lưới), **TilemapCollider2D** + **CompositeCollider2D**, và cửa sổ **Tile Palette** với các brush.
+Package tilemap theo `com.unity.2d.tilemap` và `com.unity.2d.tilemap.extras` của Unity, tên API viết camelCase: **Grid** (chữ nhật, lục giác point / flat top, isometric, isometric Z as Y, mọi swizzle), **Tilemap**, **TilemapRenderer** (gộp chunk trong PixiJS và three.js, material shader GLSL tuỳ biến, Sprite Mask), các loại tile (**Tile, RuleTile, AnimatedTile, Random / Weighted Random, Pipeline, Terrain, Hexagonal / Isometric Rule Tile, Rule Override / Advanced Rule Override**), **GameObject tile** (mỗi ô một prefab — dựng màn 3D trên lưới; chế độ **DrawOnly** vẽ GPU instancing không cần GameObject), **TilemapCollider2D** + **CompositeCollider2D** (gộp cả shape chồng nhau), **TilemapCollider3D**, và cửa sổ **Tile Palette** với các brush.
 
 ```bash
 npm install ../../pia-packages/com.pia.tilemap     # trong thư mục project
@@ -56,7 +56,7 @@ Mỗi nét vẽ là một bước Undo. Scene view hiện bản xem trước m�
 | `RefreshTile / RefreshAllTiles` | `refreshTile`, `refreshAllTiles` | |
 | `Tilemap.tilemapTileChanged / tilemapPositionsChanged` | `Tilemap.tilemapTileChanged.add(fn)`, `Tilemap.tilemapPositionsChanged.add(fn)` | `add` trả về hàm gỡ |
 | `SetEditorPreviewTile / ClearAllEditorPreviewTiles…` | `setEditorPreviewTile`, `setEditorPreviewTransformMatrix`, `setEditorPreviewColor`, `clearAllEditorPreviewTiles` | vẽ mờ, không bao giờ lưu |
-| `TilemapRenderer.sortOrder / mode / detectChunkCullingBounds / chunkCullingBounds / maskInteraction` | cùng tên | `mode`: Chunk / Individual / SRPBatch (= Chunk) |
+| `TilemapRenderer.sortOrder / mode / detectChunkCullingBounds / chunkCullingBounds / maskInteraction / material` | cùng tên | `mode`: Chunk / Individual / SRPBatch (= Chunk); `maskInteraction` dùng `SpriteMask` của engine; `material` nhận shader 2D / 3D tuỳ biến |
 | `TileBase.GetTileData / GetTileAnimationData / RefreshTile / StartUp`, `ITilemap`, `TileData`, `TileAnimationData` | `getTileData`, `getTileAnimationData`, `refreshTile`, `startUp`, `ITilemap`, `TileData`, `TileAnimationData` | `TileData` dùng chung một instance cho mọi ô: ghi, đừng giữ |
 | `Tile` (sprite, color, transform, flags, colliderType, gameObject) | `Tile` | transform = `transformOffset / Rotation / Scale` (getter `transform`); prefab lưu trong `instancedGameObject` (getter `gameObject`) |
 | `AnimatedTile`, `RandomTile`, `WeightedRandomTile`, `PipelineTile`, `TerrainTile` | cùng tên | |
@@ -65,7 +65,8 @@ Mỗi nét vẽ là một bước Undo. Scene view hiện bản xem trước m�
 | `HexagonalRuleTile` (`m_FlatTop`), `IsometricRuleTile` | `HexagonalRuleTile` (`flatTop`), `IsometricRuleTile` | |
 | `RuleOverrideTile`, `AdvancedRuleOverrideTile` | cùng tên | override là "terrain" riêng: "This" của nó là chính nó |
 | `TilemapCollider2D` (usedByComposite, extrusionFactor, maximumTileChangeCount) | cùng tên | shape theo chunk, chỉ chunk đổi mới tạo lại (cả trong Rapier) |
-| `CompositeCollider2D` (geometryType Outlines / Polygons, generationType Synchronous / Manual, vertexDistance, offsetDistance, pathCount, GetPath, GenerateGeometry) | cùng tên | Polygons = các mảnh lồi (hình chữ nhật khi viền vuông góc) |
+| `CompositeCollider2D` (geometryType Outlines / Polygons, generationType Synchronous / Manual, vertexDistance, offsetDistance, pathCount, GetPath, GenerateGeometry) | cùng tên | Polygons = các mảnh lồi (hình chữ nhật khi viền vuông góc); gộp cả shape chồng nhau |
+| (không có trong Unity) | `TilemapCollider3D` (height, mergeCells, usePrefabColliders), `Tilemap.gameObjectMode` (`'Instantiate' \| 'DrawOnly'`) | xem *GameObject tile* và *Va chạm* |
 | `GridBrushBase`, `GridBrush`, `[CustomGridBrush]` | `GridBrushBase`, `GridBrush`, `@customGridBrush` (`com.pia.tilemap/Editor/brushes`) | `paint`, `erase`, `boxFill`, `floodFill`, `pick`, `select`, `move*`, `rotate`, `flip`, `paintPreview`… |
 | `GameObjectBrush`, `RandomBrush`, `LineBrush`, `GroupBrush`, `PrefabBrush`, `PrefabRandomBrush` | cùng tên | |
 
@@ -94,15 +95,35 @@ export class CheckerTile extends TileBase {
 - **Chunk** (mặc định): mỗi chunk 32 × 32 ô gộp thành **một mesh cho mỗi texture** (dùng sprite sheet / atlas để còn 1 draw call / chunk). Chỉ chunk có ô thay đổi mới dựng lại; ô animated chỉ làm chunk của nó dựng lại khi đổi khung. Chunk ngoài khung nhìn bị bỏ qua (2D: theo view của camera, nở thêm `chunkCullingBounds` khi Manual; 3D: frustum culling của three.js).
 - **Individual**: mỗi tile là một sprite riêng, sắp xếp chung với SpriteRenderer (Order in Layer, rồi Z thế giới — Pia chưa có Transparency Sort Axis; muốn sắp theo Y hãy đặt z = y cho sprite).
 - `sortOrder`: góc vẽ trước (TopRight cho isometric để ô phía dưới che ô phía trên).
-- `material`: shader sprite 2D cho blend mode / màu `_Color`; shader GLSL tuỳ biến chưa áp lên tilemap.
+- `material`:
+  - 2D: shader sprite có sẵn (Sprites/Default, Additive…) cho blend mode / màu `_Color`. **Shader GLSL tuỳ biến** (`Pipeline 2D`, `vec4 frag(vec2 uv)`) chạy trên **từng ô**: `uv` là 0..1 trên sprite của ô, `mainTex(uv)` lấy đúng khung sprite của ô (cả ô animated), `_SpriteColor` = màu ô, `_MainTex_TexelSize` = texel của sprite ô — shader viết cho SpriteRenderer dùng được nguyên. Chunk vẫn là một draw call cho mỗi texture (chương trình "batched": khung sprite + màu theo từng đỉnh).
+  - 3D: mọi shader 3D (Standard, Unlit, surface / GLSL tuỳ biến) — `_MainTex` = texture của tile, màu ô qua vertex color.
+- **Sprite Mask** (`maskInteraction`): Visible Inside / Outside các `SpriteMask` ảnh hưởng tới `sortingOrder` của renderer (stencil; chế độ Chunk mask cả lớp chunk một lần).
 - Chống đường nối: lọc **Point** cho pixel art; với lọc Linear hoặc atlas không padding, đặt `uvInset` 0.5 (thu UV nửa texel).
 - 3D: tile sprite nằm trên mặt phẳng của lưới (XY, hoặc `orientation: 'XZ'` cho mặt đất).
+
+```glsl
+// Shader "Samples/Tile Water" (Demo2D TilemapPlatformer): gợn sóng trên từng ô nước
+vec4 frag(vec2 uv) {
+    float t = _Time.y * _WaveSpeed;
+    vec2 p = uv;
+    p.x += sin(uv.y * 12.0 + t * 2.0) * _WaveAmount;
+    return mainTex(vec2(fract(p.x), uv.y)) * _Tint;
+}
+```
 
 ## GameObject tile (3D)
 
 Tile có **Game Object** (prefab) → Tilemap tạo một instance prefab cho mỗi ô, làm con của tilemap tại tâm ô (`tileAnchor`), xoay / co giãn theo transform của ô. Instance có `HideFlags.HideAndDontSave`: ẩn khỏi Hierarchy, **không lưu** vào scene / prefab (scene chỉ lưu dữ liệu ô), bấm vào trong Scene view sẽ chọn tilemap. `InstantiateGameObjectRuntimeOnly`: chỉ tạo khi Play; `KeepGameObjectRuntimeOnly`: khi Play, đổi / xoá tile không phá instance cũ. `getInstantiatedObject(cell)` lấy instance.
 
-Nhiều ô: bật **GPU Instancing** trên material của prefab — backend gộp các khối giống nhau (10 000 khối: 3 draw call thay vì ~8 000).
+Nhiều ô: bật **GPU Instancing** trên material của prefab — backend gộp các khối giống nhau (10 000 khối: 3 draw call thay vì ~8 000). Nhưng mỗi ô vẫn là một GameObject thật (≈ 22 ms / khung cho 10 000 ô chỉ để đồng bộ).
+
+**`Tilemap.gameObjectMode = 'DrawOnly'`** (Inspector: GameObject Tiles ▸ Game Object Mode) — cho prop tĩnh (khối, cây, đá…):
+- **Không tạo GameObject**: TilemapRenderer vẽ thẳng các mesh của prefab (`MeshFilter` + `MeshRenderer`, cả con cháu, đủ submesh / material) bằng một `InstancedMesh` cho mỗi (chunk, prefab, mesh) — chỉ chunk đổi mới dựng lại, three.js frustum-cull theo chunk. 2D: `SpriteRenderer` của prefab thành sprite trong chunk (Pixi gộp batch).
+- Đặt giống hệt bản instantiate: tâm ô + transform của ô (transform ô = identity thì lấy rotation / scale của gốc prefab).
+- Mất những gì cần GameObject: script, animation, `getInstantiatedObject` (trả null), `startUp`. Va chạm: thêm **TilemapCollider3D** (dùng collider của prefab).
+- Material shader tuỳ biến tự đọc `modelMatrix` không instance được → vẽ từng mesh (vẫn không có GameObject).
+- 10 000 ô: tạo + tick ≈ 15 ms (thay vì ≈ 0.5 s), sync Scene view ≈ 0.2 ms / khung (thay vì ≈ 22 ms), ≈ 30 draw call cho cả khung.
 
 **GameObject Brush** thì khác: vẽ GameObject **thật** (prefab instance, lưu trong scene) làm con của đích, mỗi ô một đối tượng (`anchor`, `randomRotation`, `randomScale`, Erase xoá đối tượng trong ô).
 
@@ -114,8 +135,18 @@ Ground: Tilemap + TilemapRenderer + Rigidbody2D (Static) + TilemapCollider2D (Us
 
 - Shape từng ô: **Grid** = hình ô (chữ nhật / lục giác / thoi); **Sprite** = physics shape của sprite: outline tuỳ biến trong import settings (`physicsShape` của sprite trong `.meta`, đơn vị pixel từ góc dưới-trái rect), nếu không có thì outline phần đục của ảnh (dò từ pixel khi ảnh đã tải), nếu không nữa thì rect.
 - Rapier 2D: mỗi mảnh lồi một collider, chia nhóm theo chunk — sửa một ô chỉ tạo lại collider của chunk đó; callback va chạm vẫn là một cặp mỗi Collider2D. Engine **builtin** (Project Settings ▸ Physics) cũng hỗ trợ (đa giác lồi / đoạn thẳng: raycast, overlap, trigger).
-- Composite: Outlines (đường viền rỗng, nhẹ) hoặc Polygons (đặc, mảnh lồi). Gộp chính xác các shape chạm nhau / chung cạnh (kể cả chữ T: nửa ô cạnh ô đầy); shape chồng lên nhau thì không gộp.
-- Build chỉ kèm engine vật lý 2D khi scene dùng `TilemapCollider2D` / `CompositeCollider2D` (khai báo trong package.json `pia.physicsComponents`) — package không bao giờ tự kéo vật lý vào build.
+- Composite: Outlines (đường viền rỗng, nhẹ) hoặc Polygons (đặc, mảnh lồi). Gộp chính xác shape chạm nhau / chung cạnh (kể cả chữ T: nửa ô cạnh ô đầy) **và shape chồng lên nhau** (sprite rộng hơn ô, physics shape lệch, hình nằm gọn trong hình khác): cạnh được cắt tại giao điểm, cạnh nằm trong shape khác bị bỏ.
+- Build chỉ kèm engine vật lý 2D / 3D khi scene dùng `TilemapCollider2D` / `CompositeCollider2D` / `TilemapCollider3D` (khai báo trong package.json `pia.physicsComponents`) — package không bao giờ tự kéo vật lý vào build.
+
+### TilemapCollider3D (3D)
+
+```
+Ground: Tilemap (gameObjectMode DrawOnly) + TilemapRenderer + TilemapCollider3D
+```
+
+- Prefab tile của tilemap **DrawOnly**: collider của prefab (Box; Sphere / Capsule thành hộp bao) đặt như object của ô — giống bản instantiate, không phụ thuộc collider type của tile. (Chế độ Instantiate: instance tự va chạm.)
+- Collider type của tile: **Grid** = hộp phủ ô (lục giác / thoi: hộp bao), dày `height` theo trục tầng của lưới (lưới XZY nằm đất: trục Y); **Sprite** = hộp bao physics shape của sprite, dày `height`.
+- `mergeCells`: gộp các hộp thẳng hàng chạm nhau (ô Grid, khối prefab cạnh nhau) — ví dụ đảo 288 khối còn 30 hộp. Theo chunk 32 × 32, chỉ chunk đổi mới tạo lại (Rapier: một cuboid mỗi hộp; builtin: raycast / overlap). `center` dời mọi hộp.
 
 ## Dữ liệu trong scene
 
@@ -132,12 +163,14 @@ Ground: Tilemap + TilemapRenderer + Rigidbody2D (Static) + TilemapCollider2D (Us
 | Dựng mesh 256 chunk (map 512 × 512) | ≈ 15 ms (dựng lại chỉ chunk bẩn) |
 | Encode / decode map 512 × 512 | ≈ 10 ms / ≈ 8 ms, ≈ 57 KB |
 | Map 512 × 512 trong trình duyệt | 4–6 draw call, sync renderer ≈ 0.12–0.16 ms / khung khi pan; 65 536 SpriteRenderer: ≈ 190 ms / khung |
-| 10 000 GameObject tile (3D) | tạo ≈ 0.5 s; GPU Instancing: 3 draw call (tắt: ≈ 8 000) |
+| 10 000 GameObject tile (3D) | tạo ≈ 0.5 s; GPU Instancing: 3 draw call (tắt: ≈ 8 000); sync ≈ 22 ms / khung |
+| 10 000 prefab tile **DrawOnly** (3D) | `setTiles` + tick ≈ 15 ms; dựng instance lần đầu ≈ 27 ms; sync ≈ 0.1–0.2 ms / khung; ≈ 30 draw call |
+| CompositeCollider2D, 6 196 ô (map của bench) | ≈ 42 ms (thuật toán cũ chỉ gộp shape chạm nhau: ≈ 31 ms) |
 
 ## Mẫu
 
-- Demo2D `Assets/Samples/TilemapPlatformer` — địa hình Rule Tile, tile animated, composite collider, nhân vật, sinh thủ tục.
-- Demo3D `Assets/Samples/Tilemap3D` — prefab tile, GameObject Brush, lục giác + Hexagonal Rule Tile, isometric Z as Y.
+- Demo2D `Assets/Samples/TilemapPlatformer` — địa hình Rule Tile, tile animated, composite collider, nhân vật, sinh thủ tục, nước dùng shader tuỳ biến (`Shaders/TileWater.shader`).
+- Demo3D `Assets/Samples/Tilemap3D` — prefab tile **DrawOnly** + TilemapCollider3D, GameObject Brush, lục giác + Hexagonal Rule Tile, isometric Z as Y.
 
 ## Test
 
@@ -149,4 +182,4 @@ node scripts/test-core.mjs "pia-packages/com.pia.tilemap/Tests~/bench.ts"       
 
 ## Chưa có
 
-Sprite Mask (`maskInteraction` chỉ lưu), shader GLSL tuỳ biến cho tilemap, Transparency Sort Axis cho chế độ Individual, `TilemapCollider3D` (GameObject tile tự mang collider), `edgeRadius` của composite, Sprite Editor để vẽ physics shape (dữ liệu `physicsShape` đã được đọc), cập nhật collider theo khung animation (`UpdatePhysics`).
+Transparency Sort Axis cho chế độ Individual, `edgeRadius` của composite, Sprite Editor để vẽ physics shape (dữ liệu `physicsShape` đã được đọc), cập nhật collider theo khung animation (`UpdatePhysics`), collider mesh (trimesh) cho prefab DrawOnly — hiện mỗi collider thành hộp bao.

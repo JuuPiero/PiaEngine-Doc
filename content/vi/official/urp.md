@@ -1,6 +1,6 @@
 ---
 title: Universal RP
-description: Package com.pia.urp — URP Asset, Volume + 17 hiệu ứng hậu kỳ (Bloom, Tonemapping, Depth Of Field, Motion Blur, Color Curves…), FXAA, Full Screen Pass / SSAO / Decal, shader Lit / Simple Lit / Unlit, 2D Renderer (Light 2D, Shadow Caster 2D, blend style, normal map, Target Sorting Layers) như Universal Render Pipeline của Unity.
+description: Package com.pia.urp — URP Asset, Volume + 17 hiệu ứng hậu kỳ (Bloom, Tonemapping, Depth Of Field, Motion Blur, Color Curves…), FXAA, camera stacking Base / Overlay, Full Screen Pass / SSAO / Decal, shader Lit / Simple Lit / Unlit, 2D Renderer (Light 2D, Shadow Caster 2D, blend style, normal map, Target Sorting Layers) như Universal Render Pipeline của Unity.
 ---
 
 # Universal RP (`com.pia.urp`)
@@ -75,11 +75,16 @@ Component trên camera (giống Unity), thêm tự động khi tạo Volume:
 
 | Field | Ý nghĩa |
 |---|---|
+| Render Type | **Base** (tự render, cùng Stack của nó) / **Overlay** (chỉ render bên trong Stack của một camera Base) |
+| Stack | (Base) danh sách camera Overlay vẽ chồng lên, theo thứ tự |
+| Clear Depth | (Overlay) bật: vẽ đè lên mọi thứ bên dưới; tắt: dùng chung depth nên bị vật gần hơn của camera dưới che |
 | Post Processing | Camera này có nhận hiệu ứng của Volume không |
 | Anti-aliasing | None / **FXAA** (khử răng cưa sau hậu kỳ, rẻ, dùng được cả 2D) |
 | Volume Mask | Layer của các Volume tác dụng lên camera |
 
-Thứ tự trên ảnh camera: Full Screen Pass (Before) → Bloom + Uber (mọi override) → FXAA → Full Screen Pass (After).
+Thứ tự trên ảnh camera: Decal / SSAO → các camera Overlay của Stack → Full Screen Pass (Before) → Depth Of Field / Motion Blur / Panini → Bloom + Uber (mọi override) → FXAA → Full Screen Pass (After).
+
+**Camera Stacking** (như URP): camera Base vẽ ảnh của nó, rồi lần lượt các camera Overlay trong **Stack** vẽ chồng lên cùng ảnh đó, sau cùng mới tới hậu kỳ — chạy **một lần** cho cả stack, theo Volume của camera Base (bật nếu camera Base hoặc một camera Overlay trong stack bật Post Processing). Camera Overlay bỏ qua Clear Flags của nó, không tự render ra màn hình (kể cả khi không nằm trong Stack nào), mỗi camera dùng Culling Mask riêng. Cách dùng thường gặp: camera Overlay chỉ thấy layer UI / tay cầm súng (FPS) / minimap, đặt **Clear Depth** để luôn nằm trên. Chạy cả 2D lẫn 3D.
 
 ## Override hậu kỳ
 
@@ -185,5 +190,4 @@ Material Sprite-Lit có **Mask** (`_MaskTex`) và **Normal Map** (`_NormalMap`):
 ## Chưa có
 
 - Depth Of Field / Motion Blur trên camera 2D (Unity 2D Renderer cũng không có: không có depth).
-- Camera Stacking theo kiểu URP (camera Base / Overlay + danh sách Stack): engine đã chồng nhiều camera theo `depth` (Clear Flags = Depth Only); hậu kỳ áp riêng cho từng camera có Universal Additional Camera Data.
 - Light 2D chỉ chạy với pipeline 2D (như Unity). Tối đa 16 Sorting Layer có ánh sáng riêng; từ layer thứ 17 trở đi dùng chung đèn của layer thứ 16.

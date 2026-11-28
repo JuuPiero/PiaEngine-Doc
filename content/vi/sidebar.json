@@ -109,6 +109,7 @@
         "official/netcode",
         "official/textmeshpro",
         "official/tilemap",
+        "official/shader-graph",
         "official/ai-assistant",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]

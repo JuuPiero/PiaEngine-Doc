@@ -51,7 +51,7 @@ Hàm extension có thể trả về một hàm dọn dẹp, được gọi trư�
 |---|---|
 | `addMenuItem(path, action, options?)` | Thêm mục menu. Phần đầu của `path` là menu cấp 1 (`'Tools/My Tool/Run'`). `options.shortcut` (chỉ hiển thị), `options.enabled` (trả `false` để làm mờ). Mục đặt dưới `'Assets/Create/...'` cũng hiện trong menu **Create** của cửa sổ Project |
 | `registerInspector(componentName, ui)` | Thay Inspector mặc định của một component (theo tên đăng ký) bằng React component |
-| `registerWindow(id, title, ui)` | Thêm cửa sổ dock được, mở từ **Window → Extensions** |
+| `registerWindow(id, title, ui, options?)` | Thêm cửa sổ dock được, mở từ **Window → Extensions**. `options = { width, height }`: cỡ khi cửa sổ mở dạng nổi lần đầu |
 | `registerSceneGizmo(componentName, draw, options?)` | Vẽ gizmo / handle trong Scene view — xem [bên dưới](#gizmo-va-handle-trong-scene-view) |
 | `registerPropertyDrawer(target, drawer)` | Vẽ field theo attribute hoặc class (như `CustomPropertyDrawer`) — xem [Inspector attributes](../scripting/inspector-attributes.md#attribute-tuy-bien-va-property-drawer) |
 | `scene` | Scene đang hiển thị (bản Play Mode khi đang chơi) |

@@ -192,7 +192,7 @@ ENDVERTEX
 
 ## Biến toàn cục (`Shader.setGlobal*`)
 
-Giống `Shader.SetGlobalFloat` / `SetGlobalTexture` của Unity: một giá trị dùng chung cho mọi shader, đặt một lần từ script. Trong GLSL khai báo một `uniform` **không** có trong Properties (`float`, `vec2`, `vec3`, `vec4` hoặc `sampler2D`):
+Giống `Shader.SetGlobalFloat` / `SetGlobalTexture` của Unity: một giá trị dùng chung cho mọi shader, đặt một lần từ script. Trong GLSL khai báo một `uniform` **không** có trong Properties (`float`, `vec2`, `vec3`, `vec4`, `mat4` hoặc `sampler2D`):
 
 ```glsl
 uniform sampler2D _WindNoise;
@@ -209,6 +209,7 @@ Shader.setGlobalTexture('_WindNoise', noiseTextureGuid);   // GUID / đường d
 Shader.setGlobalVector('_WindParams', [1.5, 0.3, 0, 0]);
 Shader.setGlobalFloat('_Darkness', 0.4);
 Shader.setGlobalColor('_FogTint', new Color(0.6, 0.7, 1));  // 3D nhận màu ở không gian linear như property Color
+Shader.setGlobalMatrix('_WorldToShadow', matrix);           // uniform mat4 (Matrix4 hoặc 16 số)
 ```
 
 Chưa đặt thì số / vector là 0 và texture là trắng. Gọi mỗi khung hình được, không tạo object mới.

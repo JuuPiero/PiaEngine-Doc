@@ -111,6 +111,7 @@
         "official/tilemap",
         "official/shader-graph",
         "official/urp",
+        "official/visual-scripting",
         "official/ai-assistant",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]

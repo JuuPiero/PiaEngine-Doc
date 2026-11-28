@@ -110,6 +110,7 @@
         "official/textmeshpro",
         "official/tilemap",
         "official/shader-graph",
+        "official/urp",
         "official/ai-assistant",
         { "slug": "build/playable-ads", "label": "Playable Ads" }
       ]

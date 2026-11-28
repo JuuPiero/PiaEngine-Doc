@@ -1,6 +1,6 @@
 ---
 title: Universal RP
-description: Package com.pia.urp — URP Asset, Volume + 17 hiệu ứng hậu kỳ (Bloom, Tonemapping, Depth Of Field, Motion Blur, Color Curves…), FXAA, Full Screen Pass / SSAO / Decal, shader Lit / Simple Lit / Unlit, 2D Renderer (Light 2D, Shadow Caster 2D, blend style, normal map) như Universal Render Pipeline của Unity.
+description: Package com.pia.urp — URP Asset, Volume + 17 hiệu ứng hậu kỳ (Bloom, Tonemapping, Depth Of Field, Motion Blur, Color Curves…), FXAA, Full Screen Pass / SSAO / Decal, shader Lit / Simple Lit / Unlit, 2D Renderer (Light 2D, Shadow Caster 2D, blend style, normal map, Target Sorting Layers) như Universal Render Pipeline của Unity.
 ---
 
 # Universal RP (`com.pia.urp`)
@@ -160,7 +160,7 @@ Chiếu sáng sprite như 2D Renderer của URP:
 | Freeform | Shape Path (đa giác, đơn vị local; chọn đèn rồi kéo các điểm trong Scene view), Falloff (viền mềm), Falloff Strength |
 | Sprite | Sprite (cookie): ảnh của sprite nhân Color × Intensity |
 
-Mọi loại (trừ Global) có **Shadows** + **Strength**. **Shadow Caster 2D**: Casting Source = Sprite Renderer (khung của sprite, mặc định) hoặc Shape Editor (Shape Path tự vẽ, kéo điểm trong Scene view), Casts Shadows, Self Shadows (vật tự bị bóng của mình phủ).
+Mọi đèn có **Target Sorting Layers** (dropdown All / None / từng layer, mặc định mọi layer): chỉ sprite trên các Sorting Layer đó nhận đèn — ví dụ đèn trong nhà chỉ chiếu layer Interior, nền trời chỉ nhận Global Light riêng. Layer không có đèn nào chiếu (hay chỉ có đèn Additive) thì sprite giữ màu gốc. Mọi loại (trừ Global) có **Shadows** + **Strength**. **Shadow Caster 2D**: Casting Source = Sprite Renderer (khung của sprite, mặc định) hoặc Shape Editor (Shape Path tự vẽ, kéo điểm trong Scene view), Casts Shadows, Self Shadows (vật tự bị bóng của mình phủ).
 
 **Blend Style** của đèn (4 kiểu mặc định của Unity):
 
@@ -180,10 +180,10 @@ Material Sprite-Lit có **Mask** (`_MaskTex`) và **Normal Map** (`_NormalMap`):
 - Ánh sáng cộng dồn tới tối đa 2× (Intensity 2 làm sprite sáng gấp đôi, chỗ trắng thì bão hoà).
 - Shader tự viết: khai báo `uniform sampler2D _ShapeLightTexture0; uniform vec4 _ShapeLightParams;` rồi lấy ánh sáng tại pixel bằng `texture(_ShapeLightTexture0, vTargetPos * _ShapeLightParams.xy).rgb * _ShapeLightParams.z` (xem shader Sprite-Lit-Default; `_ShapeLightParams.w` = 0 khi chiếu sáng 2D đang tắt).
 
-**Hiệu năng:** texture ánh sáng có nửa độ phân giải (như Light Render Texture Scale 0.5 mặc định của Unity). Đèn đứng yên không được dựng lại, và scene không có gì di chuyển thì không vẽ lại texture ánh sáng (≈ 0.1 ms / khung). Mỗi đèn có bóng tốn thêm 2 lượt vẽ, nên chỉ bật Shadows cho những đèn cần. Vật chắn nằm ngoài bán kính đèn Point bị bỏ qua. Mỗi Blend Style đang dùng có một texture ánh sáng riêng; đèn bật Normal Maps thêm một lượt vẽ normal của các sprite Sprite-Lit (cũng chỉ khi có gì đó di chuyển).
+**Hiệu năng:** texture ánh sáng có nửa độ phân giải (như Light Render Texture Scale 0.5 mặc định của Unity). Đèn đứng yên không được dựng lại, và scene không có gì di chuyển thì không vẽ lại texture ánh sáng (≈ 0.1 ms / khung). Mỗi đèn có bóng tốn thêm 2 lượt vẽ, nên chỉ bật Shadows cho những đèn cần. Vật chắn nằm ngoài bán kính đèn Point bị bỏ qua. Mỗi Blend Style đang dùng có một texture ánh sáng riêng (các Sorting Layer cùng bộ đèn dùng chung một dải của texture: thường chỉ một dải); đèn bật Normal Maps thêm một lượt vẽ normal của các sprite Sprite-Lit (cũng chỉ khi có gì đó di chuyển).
 
 ## Chưa có
 
 - Depth Of Field / Motion Blur trên camera 2D (Unity 2D Renderer cũng không có: không có depth).
 - Camera Stacking theo kiểu URP (camera Base / Overlay + danh sách Stack): engine đã chồng nhiều camera theo `depth` (Clear Flags = Depth Only); hậu kỳ áp riêng cho từng camera có Universal Additional Camera Data.
-- Target Sorting Layers của Light 2D: engine chưa có Sorting Layer (sprite chỉ có Order in Layer), nên đèn chiếu mọi sprite Sprite-Lit. Light 2D chỉ chạy với pipeline 2D (như Unity).
+- Light 2D chỉ chạy với pipeline 2D (như Unity). Tối đa 16 Sorting Layer có ánh sáng riêng; từ layer thứ 17 trở đi dùng chung đèn của layer thứ 16.

@@ -1,6 +1,6 @@
 ---
 title: Vật lý 2D
-description: Rigidbody2D, Box/Circle/Capsule Collider 2D, callback 2D và Physics2D (Rapier 2D hoặc builtin).
+description: Rigidbody2D, Box / Circle / Capsule / Polygon / Edge Collider 2D, Physics Material 2D, callback 2D và Physics2D.
 ---
 
 # Vật lý 2D
@@ -14,11 +14,19 @@ Vật lý 2D chạy trên mặt phẳng **XY** bằng engine chọn theo project
 | Thuộc tính | Field | Mặc định | Mô tả |
 |---|---|---|---|
 | Body Type | `bodyType` | `Dynamic` | `Dynamic`, `Kinematic`, `Static` |
+| Material | `sharedMaterial` | none | **Physics Material 2D** cho các collider không có material riêng |
+| Simulated | `simulated` | `true` | Tắt: body và collider rời khỏi thế giới vật lý (không va chạm, không bị truy vấn thấy) |
+| Use Auto Mass | `useAutoMass` | `false` | Khối lượng = `density` × diện tích các collider |
 | Mass | `mass` | `1` | |
 | Linear Drag | `linearDrag` | `0` | |
 | Angular Drag | `angularDrag` | `0.05` | |
 | Gravity Scale | `gravityScale` | `1` | Hệ số trọng lực |
+| Collision Detection | `collisionDetectionMode` | `Discrete` | `Continuous`: vật nhanh không xuyên tường |
+| Sleeping Mode | `sleepMode` | `StartAwake` | `NeverSleep`, `StartAwake`, `StartAsleep` |
+| Interpolate | `interpolation` | `None` | `Interpolate` / `Extrapolate` (như Rigidbody 3D) |
+| Freeze Position X / Y | `freezePositionX` / `freezePositionY` | `false` | Khoá trục (Rapier; Box2D không có khoá từng trục) |
 | Freeze Rotation | `freezeRotation` | `false` | Không cho xoay |
+| Use Full Kinematic Contacts | `useFullKinematicContacts` | `false` | (kinematic) |
 
 ```ts
 const rb = this.getComponent(Rigidbody2D)!;
@@ -28,6 +36,18 @@ rb.addForce(new Vector2(0, 5), ForceMode2D.Impulse); // Force (cộng dồn, áp
 rb.addTorque(1);
 rb.movePosition(new Vector2(0, 2)); rb.moveRotation(45);
 rb.isKinematic; rb.sleep(); rb.wakeUp(); rb.isSleeping();
+
+// thêm (như Unity)
+rb.linearVelocityX = 3; rb.linearVelocity; rb.linearDamping;   // tên Unity 6
+rb.addForceX(10); rb.addRelativeForce(new Vector2(0, 5));
+rb.addForceAtPosition(new Vector2(0, 10), point, ForceMode2D.Impulse);
+rb.movePositionAndRotation(new Vector2(1, 2), 90);
+rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+rb.centerOfMass = new Vector2(0, -0.3); rb.worldCenterOfMass; rb.inertia; // resetCenterOfMass(), resetInertia()
+rb.getPoint(local); rb.getRelativePoint(world); rb.getVector(v); rb.getPointVelocity(p);
+rb.isTouchingLayers(LayerMask.getMask('Ground'));               // đang chạm đất?
+rb.isTouching(otherCollider); rb.getContacts(list); rb.overlapPoint(p);
+rb.attachedColliderCount; rb.getAttachedColliders(list);
 ```
 
 ## Collider 2D
@@ -35,6 +55,7 @@ rb.isKinematic; rb.sleep(); rb.wakeUp(); rb.isSleeping();
 | Thuộc tính chung | Field | Mặc định |
 |---|---|---|
 | Is Trigger | `isTrigger` | `false` |
+| Material | `sharedMaterial` | none — **Physics Material 2D** (không có: của Rigidbody 2D, rồi tới Friction / Bounciness) |
 | Friction | `friction` | `0.4` |
 | Bounciness | `bounciness` | `0` |
 | Used By Effector | `usedByEffector` | `false` — collider được Effector 2D trên cùng object dùng ([xem thêm](physics-joints.md#effector-2d)) |
@@ -45,6 +66,12 @@ rb.isKinematic; rb.sleep(); rb.wakeUp(); rb.isSleeping();
 | `BoxCollider2D` | `size` (1, 1) |
 | `CircleCollider2D` | `radius` (0.5) |
 | `CapsuleCollider2D` | `size` (0.5, 1), `direction` (`Vertical` / `Horizontal`) |
+| `PolygonCollider2D` | `paths` (mỗi path là danh sách điểm local; path nằm trong path khác = lỗ thủng). `points` = path đầu, `pathCount`, `getPath` / `setPath`, `getTotalPointCount`, `createPrimitive(sides)`. Engine tự tách thành các mảnh lồi |
+| `EdgeCollider2D` | `points` (chuỗi đoạn hở), `edgeRadius` (bo tròn), `setPoints` / `getPoints`, `pointCount`, `edgeCount` |
+
+Mọi collider 2D có thêm `density` (khi Use Auto Mass), `bounds`, `closestPoint(p)`, `isTouching(other?)`, `isTouchingLayers(mask)`, `overlapPoint(p)`. Polygon / Edge Collider 2D: bấm **Edit Collider** rồi kéo điểm, kéo chấm nhỏ giữa đoạn để chèn điểm, Ctrl + click để xoá điểm.
+
+**Physics Material 2D** (Project ▸ Create ▸ Physics Material 2D): `friction` (0.4), `bounciness` (0).
 
 `offset` đi qua đủ Transform: lật nhân vật bằng scale X = -1 (hoặc xoay Y 180°) thì collider lệch tâm lật theo, như Unity — với cả Rapier lẫn builtin. Bấm **Edit Collider** trên Inspector để kéo cạnh / góc / bán kính ngay trong Scene view ([Edit Collider](../editor/scene-view.md#edit-collider)).
 

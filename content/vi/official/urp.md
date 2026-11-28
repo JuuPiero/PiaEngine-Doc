@@ -1,17 +1,18 @@
 ---
 title: Universal RP
-description: Package com.pia.urp — URP Asset, Volume + Volume Profile và hậu kỳ (Bloom, Tonemapping, Color Adjustments, Vignette…), FXAA, Full Screen Pass, shader Lit / Simple Lit / Unlit như Universal Render Pipeline của Unity; chạy cả 2D lẫn 3D.
+description: Package com.pia.urp — URP Asset, Volume + Volume Profile và hậu kỳ (Bloom, Tonemapping, Color Adjustments, Vignette…), FXAA, Full Screen Pass, shader Lit / Simple Lit / Unlit, 2D Renderer (Light 2D, Shadow Caster 2D, Sprite-Lit) như Universal Render Pipeline của Unity.
 ---
 
 # Universal RP (`com.pia.urp`)
 
-Mô phỏng **Universal Render Pipeline** của Unity trên PiaEngine: URP Asset cho chất lượng hình ảnh, **Volume** + **Volume Profile** cho hậu kỳ (Bloom, Tonemapping, Color Adjustments…), FXAA, Full Screen Pass, và các shader `Universal Render Pipeline/Lit`, `Simple Lit`, `Unlit`.
+Mô phỏng **Universal Render Pipeline** của Unity trên PiaEngine: URP Asset cho chất lượng hình ảnh, **Volume** + **Volume Profile** cho hậu kỳ (Bloom, Tonemapping, Color Adjustments…), FXAA, Full Screen Pass, các shader `Universal Render Pipeline/Lit`, `Simple Lit`, `Unlit`, và 2D Renderer (Light 2D, Shadow Caster 2D).
 
 - **URP Asset** (Project Settings → Graphics): HDR, MSAA, Render Scale, bóng đổ (độ phân giải, khoảng cách, mềm / cứng, đèn phụ), Post Processing bật / tắt, Default Volume Profile, Renderer Features.
 - **Volume** (Global hoặc Local theo collider, Blend Distance, Weight, Priority) trộn các override giống Unity: mỗi tham số có ô **override** riêng, tham số không override giữ giá trị mặc định / của volume thấp hơn.
 - **11 override hậu kỳ:** Bloom, Tonemapping (Neutral / ACES), Color Adjustments, White Balance, Vignette, Chromatic Aberration, Film Grain, Lens Distortion, Lift Gamma Gain, Split Toning, Channel Mixer. Cùng tên tham số, cùng mặc định và cùng công thức với URP.
 - **Chạy cả 2D (PixiJS) lẫn 3D (three.js).** Ở 3D ảnh camera là HDR (half float) nên vùng sáng giữ được tới Bloom / Tonemapping. Ở 2D ảnh là LDR, giống Unity khi tắt HDR.
 - **Full Screen Pass Renderer Feature:** một material (ví dụ Fullscreen Shader Graph) chạy trên ảnh camera, trước hoặc sau hậu kỳ.
+- **2D Renderer:** Light 2D (Global / Spot / Freeform / Sprite), Shadow Caster 2D, shader Sprite-Lit-Default trên PixiJS.
 - **Shader URP:** Lit (PBR Metallic: Base Map, Metallic / Smoothness, Normal Map, Occlusion, Emission), Simple Lit (Blinn-Phong + Specular), Unlit. Có Surface Options như Unity: Render Face, Blend, Depth Write, Alpha Clipping.
 
 ## Cài
@@ -125,8 +126,33 @@ export class DamageFlash extends MonoBehaviour {
 
 Ở 3D pass chạy trên ảnh tuyến tính (linear) như URP. Material cần shader đúng pipeline của camera: Fullscreen 3D cho camera three.js, Fullscreen 2D cho camera PixiJS.
 
+## 2D Renderer (Light 2D, Shadow Caster 2D)
+
+Chiếu sáng sprite như 2D Renderer của URP:
+
+1. **Assets → Create → Rendering → URP Asset (with 2D Renderer)** rồi chọn nó ở **Project Settings → Graphics** (hoặc đặt **Renderer = 2D** trong URP Asset đang dùng). Không chọn URP Asset nào thì Light 2D vẫn chạy.
+2. **Assets → Create → Rendering → Sprite-Lit Material** (shader `Universal Render Pipeline/2D/Sprite-Lit-Default`) rồi gán vào **Material** của các SpriteRenderer cần nhận ánh sáng. Sprite dùng material mặc định (Sprites-Default) hoặc `Sprite-Unlit-Default` thì không bị ảnh hưởng (UI, hiệu ứng phát sáng…).
+3. **GameObject → Light 2D → Global Light 2D** (độ sáng nền) và **Spot Light 2D / Freeform Light 2D / Sprite Light 2D**.
+4. Muốn có bóng: bật **Shadows** trên đèn và thêm **Shadow Caster 2D** vào các vật chắn sáng.
+
+| Light Type | Field |
+|---|---|
+| Global | Color, Intensity: sáng đều mọi nơi (nhiều Global Light thì cộng lại) |
+| Point (Spot) | Radius Inner / Outer, Inner / Outer Spot Angle (nón quanh trục up của object, 360 = tròn), Falloff Strength |
+| Freeform | Shape Path (đa giác, đơn vị local; chọn đèn rồi kéo các điểm trong Scene view), Falloff (viền mềm), Falloff Strength |
+| Sprite | Sprite (cookie): ảnh của sprite nhân Color × Intensity |
+
+Mọi loại (trừ Global) có **Shadows** + **Strength**. **Shadow Caster 2D**: Casting Source = Sprite Renderer (khung của sprite, mặc định) hoặc Shape Editor (Shape Path tự vẽ, kéo điểm trong Scene view), Casts Shadows, Self Shadows (vật tự bị bóng của mình phủ).
+
+- Scene view hiện ánh sáng giống Game view, vòng bán kính / nón / đa giác của đèn đang chọn.
+- Không có Light 2D nào trong scene thì Sprite-Lit vẽ như sprite thường (đủ sáng). Đã có đèn thì chỗ không đèn nào chiếu tới tối đen, nên thường cần một Global Light 2D.
+- Ánh sáng cộng dồn tới tối đa 2× (Intensity 2 làm sprite sáng gấp đôi, chỗ trắng thì bão hoà).
+- Shader tự viết: khai báo `uniform sampler2D _ShapeLightTexture0; uniform vec4 _ShapeLightParams;` rồi lấy ánh sáng tại pixel bằng `texture(_ShapeLightTexture0, vTargetPos * _ShapeLightParams.xy).rgb * _ShapeLightParams.z` (xem shader Sprite-Lit-Default; `_ShapeLightParams.w` = 0 khi chiếu sáng 2D đang tắt).
+
+**Hiệu năng:** texture ánh sáng có nửa độ phân giải (như Light Render Texture Scale 0.5 mặc định của Unity). Đèn đứng yên không được dựng lại, và scene không có gì di chuyển thì không vẽ lại texture ánh sáng (≈ 0.1 ms / khung). Mỗi đèn có bóng tốn thêm 2 lượt vẽ, nên chỉ bật Shadows cho những đèn cần. Vật chắn nằm ngoài bán kính đèn Point bị bỏ qua.
+
 ## Chưa có
 
 - Depth Of Field, Motion Blur, Panini Projection, Color Curves, Shadows Midtones Highlights, Color Lookup.
 - SSAO, Decal, Camera Stacking theo kiểu URP (camera Overlay): dùng nhiều camera có `depth` khác nhau như trước.
-- **2D Renderer** (Light 2D, Shadow Caster 2D, Sprite-Lit): đang làm.
+- 2D Renderer: Normal Map và Mask của Sprite-Lit, blend style khác Multiply, Target Sorting Layers của đèn (đèn chiếu mọi sprite Sprite-Lit), Light 2D trên camera 3D.

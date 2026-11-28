@@ -42,6 +42,7 @@ Viết `vec4 frag(vec2 uv)`:
 - `_MainTex_TexelSize` = (1/w, 1/h, w, h).
 - Màu của SpriteRenderer tự nhân vào kết quả.
 - `Padding <px>` cho vẽ tràn ra ngoài sprite (viền, glow).
+- `vTargetPos`: vị trí pixel trên ảnh đang vẽ (gốc trên-trái), để tra một texture theo màn hình (ví dụ ánh sáng 2D của [Universal RP](../official/urp.md)).
 
 ```shaderlab Assets/Shaders/Shine.shader
 Shader "Custom/Shine"
@@ -188,6 +189,29 @@ ENDVERTEX
 | Texture | `mainTex(uv)`; mỗi texture có `<tên>_ST` (tiling, offset) và dùng được `TRANSFORM_TEX(uv, _Tex)` |
 | Hàm | `UnpackNormal`, `clip()`, `saturate`, `Luminance`, `alphaBlend` (chồng màu có alpha), `PI` |
 | Cú pháp HLSL | `float2/3/4`, `half*`, `fixed*`, `float3x3`, `lerp`, `frac`, `tex2D`, `atan2`, `ddx` / `ddy` dùng thẳng được |
+
+## Biến toàn cục (`Shader.setGlobal*`)
+
+Giống `Shader.SetGlobalFloat` / `SetGlobalTexture` của Unity: một giá trị dùng chung cho mọi shader, đặt một lần từ script. Trong GLSL khai báo một `uniform` **không** có trong Properties (`float`, `vec2`, `vec3`, `vec4` hoặc `sampler2D`):
+
+```glsl
+uniform sampler2D _WindNoise;
+uniform vec4 _WindParams;   // x = độ mạnh, y = tốc độ
+vec4 frag(vec2 uv) {
+    float n = texture2D(_WindNoise, uv + _Time.y * _WindParams.y).r;
+    return mainTex(uv + vec2(n * _WindParams.x * 0.02, 0.0));
+}
+```
+
+```ts
+import { Color, Shader } from '@pia/core';
+Shader.setGlobalTexture('_WindNoise', noiseTextureGuid);   // GUID / đường dẫn texture, Texture2D, RenderTexture
+Shader.setGlobalVector('_WindParams', [1.5, 0.3, 0, 0]);
+Shader.setGlobalFloat('_Darkness', 0.4);
+Shader.setGlobalColor('_FogTint', new Color(0.6, 0.7, 1));  // 3D nhận màu ở không gian linear như property Color
+```
+
+Chưa đặt thì số / vector là 0 và texture là trắng. Gọi mỗi khung hình được, không tạo object mới.
 
 ## Lỗi và hot reload
 

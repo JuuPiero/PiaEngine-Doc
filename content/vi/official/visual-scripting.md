@@ -42,6 +42,10 @@ npm install ../PiaEngine/pia-packages/com.pia.visualscripting     # hoặc Windo
 
 Kéo dây từ một cổng ra chỗ trống thì Fuzzy Finder mở ra và chỉ hiện các node nối được với cổng đó. Ví dụ kéo từ cổng `Transform` thì các member của Transform hiện lên đầu. Chọn node xong thì dây được nối luôn.
 
+## Sample
+
+`examples/Demo3D/Assets/Samples/VisualScripting`: game nhỏ ăn xu (Player di chuyển bằng phím, xu xoay và được nhặt, Enemy là State Graph tuần tra / đuổi theo, Game Manager dùng graph nhúng cập nhật điểm trên UI). Không có dòng code nào; xem README trong thư mục sample.
+
 ## Cửa sổ graph
 
 Mở bằng **Window → Visual Scripting → Visual Scripting Graph**, nháy đúp file `.scriptgraph.json` / `.stategraph.json`, hoặc bấm **Edit Graph** trên machine.
